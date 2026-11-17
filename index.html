@@ -2,13 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>The Little Bake | Handcrafted Gourmet Cookies • Cape Town</title>
+  <meta name="description" content="Thick 100g New York-style molten-centered gourmet cookies and curated value boxes baked fresh in Cape Town. Order online 24/7 for Tuesday & Thursday delivery or Constantia Sunday Market pickup." />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Browser Tab Favicon & Mobile Home Screen Icon -->
+  <link rel="icon" type="image/jpeg" href="Images/logo.jpeg" />
+  <link rel="apple-touch-icon" href="Images/logo.jpeg" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Paystack Inline Checkout SDK -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
 
   <style>
     :root {
@@ -30,7 +39,12 @@
       --shadow-hover: 0 16px 40px rgba(30, 18, 13, 0.13);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -54,13 +68,16 @@
       font-weight: 600;
     }
 
-    .top-ribbon span { color: var(--gold); font-weight: 800; }
+    .top-ribbon span {
+      color: var(--gold);
+      font-weight: 800;
+    }
 
     header {
       position: sticky;
       top: 0;
       z-index: 90;
-      background: rgba(250, 246, 240, 0.92);
+      background: rgba(250, 246, 240, 0.94);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
@@ -69,33 +86,48 @@
     .nav-container {
       max-width: 1140px;
       margin: 0 auto;
-      padding: 14px 20px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 13px;
       text-decoration: none;
       color: var(--espresso);
     }
 
     .brand-logo {
-      width: 52px;
-      height: 52px;
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--caramel);
+      border: 2.5px solid var(--caramel);
       background: #fff;
+      box-shadow: 0 4px 12px rgba(30, 18, 13, 0.12);
+      flex-shrink: 0;
     }
 
-    .brand-text h1 { font-size: 1.35rem; line-height: 1.1; font-weight: 800; }
-    .brand-text span { font-size: 0.74rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
+    .brand-text h1 {
+      font-size: 1.42rem;
+      line-height: 1.1;
+      font-weight: 800;
+    }
+
+    .brand-text span {
+      font-size: 0.74rem;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: block;
+      margin-top: 2px;
+    }
 
     .page-tabs {
       display: flex;
@@ -132,7 +164,7 @@
       background: var(--caramel);
       color: #fff;
       border: none;
-      padding: 10px 18px;
+      padding: 11px 18px;
       border-radius: 99px;
       font-weight: 800;
       font-size: 0.86rem;
@@ -140,6 +172,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .cart-trigger-top:hover {
+      background: var(--caramel-dark);
     }
 
     .page-view {
@@ -150,13 +187,16 @@
       animation: fadeIn 0.25s ease;
     }
 
-    .page-view.active { display: block; }
+    .page-view.active {
+      display: block;
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* HERO BANNER (Rich Dark Espresso Brown) */
     .hero-banner {
       background: linear-gradient(125deg, #24140E 0%, #3E241A 100%);
       border-radius: var(--radius-lg);
@@ -173,7 +213,17 @@
     }
 
     @media (max-width: 780px) {
-      .hero-banner { grid-template-columns: 1fr; padding: 26px 22px; }
+      .hero-banner {
+        grid-template-columns: 1fr;
+        padding: 26px 20px;
+      }
+      .brand-logo {
+        width: 52px;
+        height: 52px;
+      }
+      .brand-text h1 {
+        font-size: 1.25rem;
+      }
     }
 
     .hero-tag {
@@ -192,8 +242,18 @@
       margin-bottom: 14px;
     }
 
-    .hero-banner h2 { font-size: clamp(1.8rem, 3.5vw, 2.65rem); line-height: 1.12; margin-bottom: 14px; }
-    .hero-banner p { color: rgba(255, 255, 255, 0.84); font-size: 0.96rem; line-height: 1.6; margin-bottom: 20px; }
+    .hero-banner h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+      line-height: 1.12;
+      margin-bottom: 14px;
+    }
+
+    .hero-banner p {
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.96rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
 
     .hero-badges {
       display: flex;
@@ -205,7 +265,7 @@
     }
 
     .hero-badges div {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.09);
       padding: 8px 14px;
       border-radius: 12px;
       display: flex;
@@ -221,12 +281,13 @@
 
     .hero-collage img {
       width: 100%;
-      height: 135px;
+      height: 138px;
       object-fit: cover;
       border-radius: 16px;
-      border: 2px solid rgba(255,255,255,0.15);
+      border: 2px solid rgba(255, 255, 255, 0.16);
     }
 
+    /* TOOLBAR & FILTERS */
     .toolbar {
       display: flex;
       justify-content: space-between;
@@ -256,7 +317,11 @@
       transition: all 0.2s;
     }
 
-    .cat-pill.active { background: var(--caramel); color: #fff; border-color: var(--caramel); }
+    .cat-pill.active {
+      background: var(--caramel);
+      color: #fff;
+      border-color: var(--caramel);
+    }
 
     .search-box {
       position: relative;
@@ -276,8 +341,19 @@
       outline: none;
     }
 
-    .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+    .search-box input:focus {
+      border-color: var(--caramel);
+    }
 
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    /* PRODUCT GRID */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
@@ -296,18 +372,29 @@
       transition: transform 0.22s ease, box-shadow 0.22s ease;
     }
 
-    .cookie-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .cookie-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
 
     .cookie-img-wrap {
       position: relative;
-      height: 215px;
+      height: 220px;
       width: 100%;
       overflow: hidden;
       background: #EFE6DC;
     }
 
-    .cookie-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.35s ease; }
-    .cookie-card:hover .cookie-img-wrap img { transform: scale(1.05); }
+    .cookie-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .cookie-card:hover .cookie-img-wrap img {
+      transform: scale(1.05);
+    }
 
     .tag-pill {
       position: absolute;
@@ -324,16 +411,34 @@
       letter-spacing: 0.5px;
     }
 
-    .tag-pill.molten { background: var(--caramel); }
-    .tag-pill.box { background: var(--sage); }
+    .tag-pill.molten {
+      background: var(--caramel);
+    }
+
+    .tag-pill.box {
+      background: var(--sage);
+    }
+
+    .save-pill {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--gold);
+      color: var(--espresso);
+      padding: 5px 10px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
 
     .weight-pill {
       position: absolute;
       bottom: 10px;
       right: 10px;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       color: var(--espresso);
-      padding: 3px 9px;
+      padding: 3px 10px;
       border-radius: 99px;
       font-size: 0.72rem;
       font-weight: 800;
@@ -347,8 +452,50 @@
       justify-content: space-between;
     }
 
-    .cookie-title { font-size: 1.18rem; font-weight: 700; margin-bottom: 6px; color: var(--espresso); }
-    .cookie-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.48; margin-bottom: 16px; }
+    .cookie-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--espresso);
+    }
+
+    .cookie-desc {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.48;
+      margin-bottom: 14px;
+    }
+
+    /* 6 / 12 Box Variant Selector */
+    .variant-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--bg-alt);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    .variant-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 7px 6px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .variant-btn.active {
+      background: #fff;
+      color: var(--espresso);
+      box-shadow: 0 2px 6px rgba(30, 18, 13, 0.1);
+    }
 
     .cookie-bottom {
       display: flex;
@@ -358,7 +505,24 @@
       border-top: 1px solid var(--border);
     }
 
-    .cookie-price { font-size: 1.22rem; font-weight: 800; color: var(--espresso); }
+    .price-stack {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .cookie-price {
+      font-size: 1.24rem;
+      font-weight: 800;
+      color: var(--espresso);
+    }
+
+    .cookie-old-price {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: line-through;
+      font-weight: 600;
+    }
 
     .btn-add {
       background: var(--espresso);
@@ -372,7 +536,9 @@
       transition: background 0.2s;
     }
 
-    .btn-add:hover { background: var(--caramel); }
+    .btn-add:hover {
+      background: var(--caramel);
+    }
 
     .qty-control {
       display: flex;
@@ -394,11 +560,20 @@
       font-weight: 800;
       font-size: 1rem;
       cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
     }
 
-    .qty-btn.plus { background: var(--caramel); color: #fff; }
-    .qty-num { font-weight: 800; min-width: 20px; text-align: center; font-size: 0.92rem; }
+    .qty-btn.plus {
+      background: var(--caramel);
+      color: #fff;
+    }
+
+    .qty-num {
+      font-weight: 800;
+      min-width: 20px;
+      text-align: center;
+      font-size: 0.92rem;
+    }
 
     /* STORY PAGE */
     .story-grid {
@@ -413,9 +588,19 @@
       align-items: center;
     }
 
-    @media (max-width: 780px) { .story-grid { grid-template-columns: 1fr; padding: 24px; } }
+    @media (max-width: 780px) {
+      .story-grid {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+    }
 
-    .story-img { width: 100%; height: 420px; object-fit: cover; border-radius: var(--radius-md); }
+    .story-img {
+      width: 100%;
+      height: 430px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+    }
 
     .story-quote {
       background: var(--bg);
@@ -429,6 +614,35 @@
       margin: 18px 0;
     }
 
+    .crew-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 640px) {
+      .crew-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .crew-card {
+      background: #fff;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .crew-card img {
+      width: 100%;
+      height: 290px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
     .pillars-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -436,8 +650,18 @@
       margin-top: 28px;
     }
 
-    .pillar-card { background: #fff; padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border); }
-    .pillar-card i { font-size: 1.6rem; color: var(--caramel); margin-bottom: 12px; }
+    .pillar-card {
+      background: #fff;
+      padding: 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .pillar-card i {
+      font-size: 1.6rem;
+      color: var(--caramel);
+      margin-bottom: 12px;
+    }
 
     /* REVIEWS PAGE */
     .google-summary-bar {
@@ -454,9 +678,17 @@
       margin-bottom: 26px;
     }
 
-    .stars-gold { color: #FBBC05; font-size: 1.15rem; letter-spacing: 2px; }
+    .stars-gold {
+      color: #FBBC05;
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+    }
 
-    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
 
     .review-card {
       background: #fff;
@@ -470,10 +702,23 @@
       gap: 14px;
     }
 
-    .reviewer-meta { display: flex; align-items: center; gap: 12px; }
+    .reviewer-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
     .reviewer-avatar {
-      width: 42px; height: 42px; border-radius: 50%; background: var(--caramel); color: #fff;
-      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--caramel);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
       flex-shrink: 0;
     }
 
@@ -487,15 +732,58 @@
       align-items: center;
       gap: 10px;
     }
-    .faq-section-heading i { color: var(--caramel); }
 
-    .faq-list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-    details.faq-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; box-shadow: var(--shadow); }
-    details.faq-item summary { font-weight: 800; font-size: 1.0rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    details.faq-item summary::-webkit-details-marker { display: none; }
-    details.faq-item .faq-body { margin-top: 12px; color: var(--muted); font-size: 0.91rem; line-height: 1.68; padding-top: 12px; border-top: 1px solid var(--border); }
-    details.faq-item .faq-body ul { margin: 8px 0 8px 20px; }
-    details.faq-item .faq-body li { margin-bottom: 6px; }
+    .faq-section-heading i {
+      color: var(--caramel);
+    }
+
+    .faq-list {
+      max-width: 820px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    details.faq-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    details.faq-item summary {
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    details.faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.faq-item .faq-body {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.91rem;
+      line-height: 1.68;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    details.faq-item .faq-body ul {
+      margin: 8px 0 8px 20px;
+    }
+
+    details.faq-item .faq-body li {
+      margin-bottom: 6px;
+    }
 
     .schedule-table {
       width: 100%;
@@ -503,11 +791,14 @@
       margin-top: 12px;
       font-size: 0.88rem;
     }
-    .schedule-table th, .schedule-table td {
+
+    .schedule-table th,
+    .schedule-table td {
       text-align: left;
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
     }
+
     .schedule-table th {
       background: var(--bg-alt);
       color: var(--espresso);
@@ -531,7 +822,9 @@
     }
 
     @media (max-width: 780px) {
-      .footer-grid { grid-template-columns: 1fr; }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .footer-col h4 {
@@ -561,7 +854,9 @@
       transition: color 0.2s;
     }
 
-    .footer-links a:hover { color: var(--caramel); }
+    .footer-links a:hover {
+      color: var(--caramel);
+    }
 
     .social-row {
       display: flex;
@@ -623,61 +918,183 @@
       transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .floating-cart.visible { transform: translateX(-50%) translateY(0); }
+    .floating-cart.visible {
+      transform: translateX(-50%) translateY(0);
+    }
 
     .drawer-overlay {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
-      z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
     }
-    .drawer-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .checkout-drawer {
-      position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 480px; background: #fff;
-      z-index: 201; padding: 26px 22px; overflow-y: auto; transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      z-index: 201;
+      padding: 26px 22px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
     }
-    .checkout-drawer.active { transform: translateX(0); }
 
-    .free-ship-banner { background: var(--bg-alt); border: 1px solid var(--border); padding: 12px 14px; border-radius: 12px; font-size: 0.83rem; margin: 14px 0; }
-    .free-ship-banner.unlocked { background: var(--sage-bg); border-color: #A3D9B8; color: var(--sage); font-weight: 700; }
-    .progress-bar { height: 6px; background: #dfd5c8; border-radius: 99px; margin-top: 8px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--caramel); width: 0%; transition: width 0.3s; }
+    .checkout-drawer.active {
+      transform: translateX(0);
+    }
+
+    .free-ship-banner {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.83rem;
+      margin: 14px 0;
+    }
+
+    .free-ship-banner.unlocked {
+      background: var(--sage-bg);
+      border-color: #A3D9B8;
+      color: var(--sage);
+      font-weight: 700;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #dfd5c8;
+      border-radius: 99px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--caramel);
+      width: 0%;
+      transition: width 0.3s;
+    }
 
     .cutoff-notice {
       background: #FFF8EB;
       border: 1px solid #F3D9A4;
       color: #5C3D0E;
-      padding: 10px 12px;
-      border-radius: 10px;
+      padding: 11px 13px;
+      border-radius: 12px;
       font-size: 0.78rem;
-      line-height: 1.45;
+      line-height: 1.5;
       margin-bottom: 14px;
     }
 
-    .form-field { margin-bottom: 14px; }
-    .form-field label { display: block; font-size: 0.76rem; font-weight: 800; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.4px; }
-    .form-field input, .form-field select, .form-field textarea {
-      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
-      background: var(--bg); font-family: inherit; font-size: 0.94rem; color: var(--espresso);
+    .scheduled-pill {
+      display: inline-block;
+      margin-top: 6px;
+      background: #5C3D0E;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .form-field {
+      margin-bottom: 14px;
+    }
+
+    .form-field label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+      letter-spacing: 0.4px;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-family: inherit;
+      font-size: 0.94rem;
+      color: var(--espresso);
     }
 
     .pay-btn {
-      width: 100%; background: var(--caramel); color: #fff; border: none; padding: 16px;
-      border-radius: 14px; font-size: 1.02rem; font-weight: 800; cursor: pointer; margin-top: 10px;
+      width: 100%;
+      background: var(--caramel);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.02rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
     }
-    .pay-btn:hover { background: var(--caramel-dark); }
+
+    .pay-btn:hover {
+      background: var(--caramel-dark);
+    }
+
+    /* SUCCESS MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 18, 13, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      max-width: 440px;
+      width: 100%;
+      padding: 30px 24px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+    }
   </style>
 </head>
 <body>
 
 <div class="top-ribbon">
-  🍪 <span>ORDER ONLINE 24/7</span> • FREE CAPE TOWN DELIVERY OVER R300 • TUES & THURS DISPATCH
+  🍪 <span>ORDER ONLINE 24/7</span> • FREE CAPE TOWN DELIVERY OVER R300 • TUES &amp; THURS DISPATCH
 </div>
 
 <header>
   <div class="nav-container">
-    <a href="#" class="brand" onclick="switchPage('shop')">
-      <img src="images/logo.png" alt="The Little Bake" class="brand-logo" onerror="this.src='https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=200&q=80'">
+    <a href="#" class="brand" onclick="switchPage('shop'); return false;">
+      <img src="Images/logo.jpeg" alt="The Little Bake" class="brand-logo" />
       <div class="brand-text">
         <h1>The Little Bake</h1>
         <span>Artisanal Cookies • Cape Town</span>
@@ -688,7 +1105,7 @@
       <button class="page-tab active" data-tab="shop" onclick="switchPage('shop', this)">Shop Menu</button>
       <button class="page-tab" data-tab="story" onclick="switchPage('story', this)">Our Story</button>
       <button class="page-tab" data-tab="reviews" id="navReviewsTab" onclick="switchPage('reviews', this)">Google Reviews ★ 5.0</button>
-      <button class="page-tab" data-tab="faq" onclick="switchPage('faq', this)">FAQ & T&Cs</button>
+      <button class="page-tab" data-tab="faq" onclick="switchPage('faq', this)">FAQ &amp; T&amp;Cs</button>
     </nav>
 
     <button class="cart-trigger-top" onclick="openDrawer()">
@@ -704,32 +1121,32 @@
     <div>
       <div class="hero-tag"><i class="fa-solid fa-fire"></i> Thick 100g New York-Style Cookies</div>
       <h2>Golden, Crisp Edges. Oozing Molten Centers.</h2>
-      <p>Handcrafted in small batches in Cape Town using real butter, rich cocoa, and indulgent cores. Order online 24/7 for scheduled Tuesday & Thursday Cape Town delivery, or collect hot at Constantia’s Under the Tree Market every Sunday.</p>
+      <p>Handcrafted in small batches in Cape Town using real butter, rich cocoa, and indulgent cores. Order online 24/7 for scheduled Tuesday &amp; Thursday Cape Town delivery, or collect fresh at Constantia’s Under the Tree Market every Sunday (10:00 AM – 3:00 PM).</p>
       <div class="hero-badges">
-        <div><i class="fa-solid fa-truck-fast" style="color:var(--gold)"></i> Free Delivery Over R300 (Tues & Thurs)</div>
+        <div><i class="fa-solid fa-truck-fast" style="color:var(--gold)"></i> Free Delivery Over R300 (Tues &amp; Thurs)</div>
         <div><i class="fa-solid fa-store" style="color:var(--gold)"></i> Constantia Market Sundays 10am–3pm</div>
-        <div><i class="fa-solid fa-shield-halved" style="color:var(--gold)"></i> Apple Pay, Card, SnapScan & EFT</div>
+        <div><i class="fa-solid fa-shield-halved" style="color:var(--gold)"></i> Apple Pay, Card, SnapScan &amp; EFT</div>
       </div>
     </div>
     <div class="hero-collage">
-      <img src="images/velvet-crush.jpg" onerror="this.src='https://images.unsplash.com/photo-1618923850107-d1a234d7a73a?auto=format&fit=crop&w=600&q=80'" alt="Velvet Crush">
-      <img src="images/midnight-espresso.jpg" onerror="this.src='https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=600&q=80'" alt="Midnight Espresso">
-      <img src="images/cookies-and-cream.jpg" onerror="this.src='https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=600&q=80'" alt="Cookies & Cream">
-      <img src="images/the-smore.jpg" onerror="this.src='https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=600&q=80'" alt="The S'more">
+      <img src="Images/RedVelvet.jpeg" alt="Velvet Crush" />
+      <img src="Images/Midnight-expresso.jpeg" alt="Midnight Espresso" />
+      <img src="Images/Cookie&cream.jpeg" alt="Cookies & Cream" />
+      <img src="Images/Smore.jpeg" alt="The S'more" />
     </div>
   </div>
 
   <div class="toolbar">
     <div class="category-pills">
       <button class="cat-pill active" onclick="filterCategory('all', this)">All Treats (14)</button>
-      <button class="cat-pill" onclick="filterCategory('boxes', this)">Value Gift Boxes (4)</button>
+      <button class="cat-pill" onclick="filterCategory('boxes', this)">Value Boxes &amp; Brownies (4)</button>
       <button class="cat-pill" onclick="filterCategory('molten', this)">Molten-Stuffed (R40)</button>
       <button class="cat-pill" onclick="filterCategory('classic', this)">Signature Classics (R35)</button>
     </div>
 
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Search Velvet Crush, Oreo, Brownies..." onkeyup="renderProducts()">
+      <input type="text" id="searchInput" placeholder="Search Velvet Crush, Oreo, Brownies..." onkeyup="renderProducts()" />
     </div>
   </div>
 
@@ -739,7 +1156,7 @@
 <!-- ==================== PAGE 2: OUR STORY ==================== -->
 <section class="page-view" id="page-story">
   <div class="story-grid">
-    <img src="images/our-story.jpg" onerror="this.src='https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=900&q=80'" alt="The Little Bake Cape Town Kitchen" class="story-img">
+    <img src="Images/About.jpeg" alt="Salwaa and Ebrahiem at The Little Bake stall at Constantia Under the Tree Market" class="story-img" />
     <div>
       <div class="hero-tag" style="background:var(--bg-alt); color:var(--caramel); border-color:var(--border);">Born in Cape Town • Small-Batch Craft</div>
       <h2 style="font-size:2rem; margin-bottom:14px;">From Kitchen Experiments to Cape Town’s Favourite 100g Cookie</h2>
@@ -753,8 +1170,21 @@
         “Seeing a customer take that first warm bite at the market—when the crisp edge gives way to a molten center—is the entire reason we bake.”
       </div>
       <p style="color:var(--muted); line-height:1.72;">
-        What began as boxes shared with family, friends, and neighbours in Tafelsig quickly grew into a weekly Sunday ritual under the oaks at <strong>Constantia’s Under the Tree Market</strong>, and now delivers straight to homes and offices across Cape Town every Tuesday and Thursday.
+        What began as boxes shared with family, friends, and neighbours in Tafelsig quickly grew into a weekly Sunday ritual under the oaks at <strong>Constantia’s Under the Tree Market (10:00 AM – 3:00 PM)</strong>, and now delivers straight to homes and offices across Cape Town every Tuesday and Thursday.
       </p>
+    </div>
+  </div>
+
+  <div class="crew-grid">
+    <div class="crew-card">
+      <img src="Images/Staff-1.jpeg" alt="The Little Bake Constantia Market Crew" />
+      <h3 style="font-size:1.1rem; margin-bottom:4px;">Sunday Market Crew</h3>
+      <p style="color:var(--muted); font-size:0.86rem;">Serving fresh batches every Sunday from 10:00 AM to 3:00 PM at Under the Tree Market, Constantia.</p>
+    </div>
+    <div class="crew-card">
+      <img src="Images/staff-2.jpeg" alt="Salwaa and Team at The Little Bake" />
+      <h3 style="font-size:1.1rem; margin-bottom:4px;">Packed Fresh to Order</h3>
+      <p style="color:var(--muted); font-size:0.86rem;">Every online and market box is hand-packed and sealed fresh in Cape Town.</p>
     </div>
   </div>
 
@@ -766,12 +1196,12 @@
     </div>
     <div class="pillar-card">
       <i class="fa-solid fa-certificate"></i>
-      <h3 style="margin-bottom:8px;">Health & Safety Certified</h3>
+      <h3 style="margin-bottom:8px;">Health &amp; Safety Certified</h3>
       <p style="color:var(--muted); font-size:0.88rem; line-height:1.55;">Operating under Abrahams Legacy Group (Pty) Ltd with an official City of Cape Town Certificate of Acceptability (CoA) and Hawker License.</p>
     </div>
     <div class="pillar-card">
       <i class="fa-solid fa-heart"></i>
-      <h3 style="margin-bottom:8px;">Real Dairy & Pure Cocoa</h3>
+      <h3 style="margin-bottom:8px;">Real Dairy &amp; Pure Cocoa</h3>
       <p style="color:var(--muted); font-size:0.88rem; line-height:1.55;">Baked exclusively with real farm butter, cream cheese, dark cocoa, and rich chocolate chunks—never vegetable shortenings or artificial compounds.</p>
     </div>
   </div>
@@ -782,13 +1212,13 @@
   <div class="google-summary-bar">
     <div>
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
-        <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" width="28" height="28">
+        <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" width="28" height="28" />
         <h2 style="font-size:1.5rem;">Customer Reviews on Google</h2>
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
         <strong id="googleRatingScore" style="font-size:1.4rem;">5.0</strong>
         <span class="stars-gold">★★★★★</span>
-        <span id="googleRatingCount" style="color:var(--muted); font-size:0.88rem;">Based on 8 verified Google reviews</span>
+        <span id="googleRatingCount" style="color:var(--muted); font-size:0.88rem;">Based on verified Google reviews</span>
       </div>
     </div>
     <a href="https://g.page/r/CY3NJt-E97NgEBM/review" target="_blank" rel="noopener" class="btn-add" style="text-decoration:none; background:var(--caramel); padding:12px 22px;">
@@ -817,7 +1247,7 @@
       <div>
         <div class="stars-gold" style="margin-bottom:10px;">★★★★★</div>
         <p style="font-size:0.92rem; line-height:1.55; color:var(--espresso);">
-          “Such wonderful heartwarming service and absolutely divine cookies! The red velvet and strawberry cookies are to die for”
+          “Such wonderful heartwarming service and absolutely divine cookies! The red velvet and molten chocolate cookies are to die for.”
         </p>
       </div>
       <div class="reviewer-meta">
@@ -833,7 +1263,7 @@
       <div>
         <div class="stars-gold" style="margin-bottom:10px;">★★★★★</div>
         <p style="font-size:0.92rem; line-height:1.55; color:var(--espresso);">
-          “Amazing cookies, best in the game”
+          “Amazing cookies, best in the game!”
         </p>
       </div>
       <div class="reviewer-meta">
@@ -850,11 +1280,11 @@
 <!-- ==================== PAGE 4: FAQ & TERMS ==================== -->
 <section class="page-view" id="page-faq">
   <div style="text-align:center; max-width:660px; margin:0 auto 24px;">
-    <h2 style="font-size:2rem; margin-bottom:8px;">Frequently Asked Questions & Terms</h2>
-    <p style="color:var(--muted);">Everything you need to know about ingredients, payments, order quantities, Cape Town delivery schedules, and our Terms & Conditions of Sale.</p>
+    <h2 style="font-size:2rem; margin-bottom:8px;">Frequently Asked Questions &amp; Terms</h2>
+    <p style="color:var(--muted);">Everything you need to know about ingredients, payments, order quantities, Cape Town delivery schedules, and our Terms &amp; Conditions of Sale.</p>
   </div>
 
-  <h3 class="faq-section-heading"><i class="fa-solid fa-circle-question"></i> Orders, Ingredients & Payments</h3>
+  <h3 class="faq-section-heading"><i class="fa-solid fa-circle-question"></i> Orders, Ingredients &amp; Payments</h3>
   <div class="faq-list">
     <details class="faq-item" open>
       <summary>Are your cookies made with sugar? Do you offer sugar-free options? <i class="fa-solid fa-chevron-down"></i></summary>
@@ -868,6 +1298,7 @@
       <div class="faq-body">
         <ul>
           <li><strong>No Minimum Order:</strong> You can order as little as a single 100g cookie for pickup or delivery.</li>
+          <li><strong>Bundle Savings:</strong> Every 6-pack box saves <strong>R10</strong> and every 12-pack box saves <strong>R30</strong> compared to single-cookie prices.</li>
           <li><strong>Free Delivery Threshold:</strong> Cart subtotals of <strong>R300 or more</strong> automatically qualify for free Cape Town doorstep delivery.</li>
           <li><strong>Large / Corporate / Event Orders (24+ Cookies):</strong> For office platters, gifting, or events requiring 24 or more cookies, please place your order at least <strong>48 hours prior</strong> to your required Tuesday or Thursday dispatch, or email <a href="mailto:orders@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">orders@thelittlebake.co.za</a> for custom scheduling.</li>
         </ul>
@@ -875,13 +1306,13 @@
     </details>
 
     <details class="faq-item">
-      <summary>What payment methods do you accept & is my payment secure? <i class="fa-solid fa-chevron-down"></i></summary>
+      <summary>What payment methods do you accept &amp; is my payment secure? <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
         All online checkout payments are processed securely via <strong>Paystack</strong> (a PCI-DSS Level 1 certified South African payment gateway). We accept:
         <ul>
-          <li><strong>Credit & Debit Cards</strong> (Visa, Mastercard, American Express)</li>
-          <li><strong>Apple Pay</strong> (1-tap checkout on iPhone, iPad & Mac)</li>
-          <li><strong>SnapScan & Zapper QR</strong></li>
+          <li><strong>Credit &amp; Debit Cards</strong> (Visa, Mastercard, American Express)</li>
+          <li><strong>Apple Pay</strong> (1-tap checkout on iPhone, iPad &amp; Mac)</li>
+          <li><strong>SnapScan &amp; Zapper QR</strong></li>
           <li><strong>Instant EFT</strong> across all major South African banks</li>
         </ul>
         We never see or store your card details on our website. Your order enters our baking schedule the moment Paystack confirms payment and emails your official receipt.
@@ -891,12 +1322,12 @@
     <details class="faq-item">
       <summary>What happens if my payment fails or disconnects? <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
-        If your browser closes or a bank OTP times out before Paystack confirms payment, no funds are deducted and the unpaid order will not enter our baking queue. If your bank app shows a deduction but you did not receive a confirmation email within 10 minutes, send your order number or proof of payment to <a href="mailto:support@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">support@thelittlebake.co.za</a> or WhatsApp <a href="https://wa.me/27662852858" style="color:var(--sage); font-weight:700;">+27 66 285 2858</a> and we will verify and confirm your batch immediately.
+        If your browser closes or a bank OTP times out before Paystack confirms payment, no funds are deducted and the unpaid order will not enter our baking queue. If your bank app shows a deduction but you did not receive a confirmation email within 10 minutes, send your order reference or proof of payment to <a href="mailto:support@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">support@thelittlebake.co.za</a> and we will verify and confirm your batch immediately.
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>Allergens & Dietary Information <i class="fa-solid fa-chevron-down"></i></summary>
+      <summary>Allergens &amp; Dietary Information <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
         All products contain <strong>wheat (gluten), dairy (real butter, milk, cream cheese), soy lecithin (in chocolate), and eggs</strong>. Our kitchen also handles <strong>peanuts and tree nuts</strong> (including coconut, almonds, and hazelnuts). Because all batches are prepared in the same artisanal facility, we cannot guarantee zero cross-contamination for severe allergies.
       </div>
@@ -914,16 +1345,16 @@
     </details>
   </div>
 
-  <h3 class="faq-section-heading"><i class="fa-solid fa-truck-fast"></i> Delivery Schedules, Pickups & Queries</h3>
+  <h3 class="faq-section-heading"><i class="fa-solid fa-truck-fast"></i> Delivery Schedules, Pickups &amp; Queries</h3>
   <div class="faq-list">
     <details class="faq-item" open>
-      <summary>Delivery Days, Zones & Order Cutoff Lead Times <i class="fa-solid fa-chevron-down"></i></summary>
+      <summary>Delivery Days, Zones &amp; Order Cutoff Lead Times <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
         Our online store accepts orders <strong>24/7</strong>. Because every batch is cold-rested for 24 hours and baked fresh to order, Cape Town deliveries run via <strong>Uber Package</strong> strictly on <strong>Tuesdays and Thursdays</strong>:
         <table class="schedule-table">
           <thead>
             <tr>
-              <th>Order & Payment Confirmed Window</th>
+              <th>Order &amp; Payment Confirmed Window</th>
               <th>Scheduled Delivery Day</th>
             </tr>
           </thead>
@@ -943,7 +1374,7 @@
           </tbody>
         </table>
         <p style="margin-top:10px;">
-          <strong>Delivery Rates (Under R300):</strong> Zone 1 (Mitchells Plain / Philippi) – R75 • Zone 2 (Southern & Northern Suburbs) – R115 • Zone 3 (CBD / Atlantic Seaboard) – R150. <strong>Orders of R300+ ship FREE.</strong>
+          <strong>Delivery Rates (Under R300):</strong> Zone 1 (Mitchells Plain / Philippi) – R75 • Zone 2 (Southern &amp; Northern Suburbs) – R115 • Zone 3 (CBD / Atlantic Seaboard) – R150. <strong>Orders of R300+ ship FREE.</strong>
         </p>
       </div>
     </details>
@@ -951,54 +1382,54 @@
     <details class="faq-item">
       <summary>How does Uber Package delivery work on delivery day? <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
-        Once your box is baked, sealed, and dispatched on Tuesday or Thursday, we send you a WhatsApp message with your live <strong>Uber Package tracking link</strong> so you can follow the driver to your door. Please ensure someone is available at the delivery address to receive the parcel, as perishable food cannot be left unattended outside.
+        Once your box is baked, sealed, and dispatched on Tuesday or Thursday, we send your live <strong>Uber Package tracking link</strong> so you can follow the driver to your door. Please ensure someone is available at the delivery address to receive the parcel, as perishable food cannot be left unattended outside.
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>Sunday Constantia Market & Tafelsig Pickups <i class="fa-solid fa-chevron-down"></i></summary>
+      <summary>Sunday Constantia Market &amp; Tafelsig Pickups <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
         <ul>
           <li><strong>Constantia Market Pickup (Free):</strong> Collect pre-paid online orders every Sunday between <strong>10:00 AM and 3:00 PM</strong> at our stall at <strong>Under the Tree Market, Constantia</strong> (orders must be placed by Saturday 12:00 PM).</li>
-          <li><strong>Tafelsig Collection (Free):</strong> Collect by arrangement on Tuesdays or Thursdays from 1 Gail St, Tafelsig, Mitchells Plain.</li>
+          <li><strong>Tafelsig Collection (Free):</strong> Collect on Tuesdays or Thursdays from 1 Gail St, Tafelsig, Mitchells Plain.</li>
         </ul>
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>Order Changes, Delivery Queries & Customer Support <i class="fa-solid fa-chevron-down"></i></summary>
+      <summary>Order Changes, Delivery Queries &amp; Customer Support <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
-        Need to update a delivery address, add a gift note, or check on a dispatch? Contact us before your cutoff window (Monday 12:00 PM or Wednesday 12:00 PM):
+        Need to update a delivery address, add a gift note, or check on a dispatch? Email us before your cutoff window (Monday 12:00 PM or Wednesday 12:00 PM):
         <ul>
-          <li><strong>Order & Flavor Changes:</strong> <a href="mailto:orders@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">orders@thelittlebake.co.za</a></li>
-          <li><strong>General & Payment Queries:</strong> <a href="mailto:support@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">support@thelittlebake.co.za</a></li>
-          <li><strong>Urgent Delivery / WhatsApp:</strong> <a href="https://wa.me/27662852858" target="_blank" rel="noopener" style="color:var(--sage); font-weight:700;">+27 66 285 2858</a></li>
+          <li><strong>Order &amp; Flavor Changes:</strong> <a href="mailto:orders@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">orders@thelittlebake.co.za</a></li>
+          <li><strong>General &amp; Payment Queries:</strong> <a href="mailto:support@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">support@thelittlebake.co.za</a></li>
+          <li><strong>Damaged / Incorrect Orders:</strong> <a href="mailto:disputes@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">disputes@thelittlebake.co.za</a></li>
         </ul>
       </div>
     </details>
   </div>
 
-  <h3 class="faq-section-heading"><i class="fa-solid fa-file-contract"></i> Full Terms & Conditions of Sale</h3>
+  <h3 class="faq-section-heading"><i class="fa-solid fa-file-contract"></i> Full Terms &amp; Conditions of Sale</h3>
   <div class="faq-list">
     <details class="faq-item" open>
-      <summary>Terms & Conditions of Sale, Refunds & POPIA Privacy Policy <i class="fa-solid fa-chevron-down"></i></summary>
+      <summary>Terms &amp; Conditions of Sale, Refunds &amp; POPIA Privacy Policy <i class="fa-solid fa-chevron-down"></i></summary>
       <div class="faq-body">
-        <strong>1. Merchant Identity & Legal Entity:</strong><br>
-        This website (<em>thelittlebake.co.za</em>) is owned and operated by <strong>The Little Bake</strong>, a trading division of <strong>Abrahams Legacy Group (Pty) Ltd</strong> (Registration No: 2026/262704/07), registered at 1 Gail St, Tafelsig, Mitchells Plain, Cape Town, 7785, South Africa. By placing an order on this site, you agree to these Terms & Conditions.<br><br>
+        <strong>1. Merchant Identity &amp; Legal Entity:</strong><br>
+        This website (<em>thelittlebake.co.za</em>) is owned and operated by <strong>The Little Bake</strong>, a trading division of <strong>Abrahams Legacy Group (Pty) Ltd</strong> (Registration No: 2026/262704/07), registered at 1 Gail St, Tafelsig, Mitchells Plain, Cape Town, 7785, South Africa. By placing an order on this site, you agree to these Terms &amp; Conditions.<br><br>
 
-        <strong>2. Products, Pricing & Availability:</strong><br>
+        <strong>2. Products, Pricing &amp; Availability:</strong><br>
         All prices are listed in South African Rand (ZAR) and are inclusive of applicable charges. Because our cookies are handcrafted in small batches, individual cookie weights (approx. 100g) and fillings may exhibit slight artisanal variation. We reserve the right to update menu items, box assortments, and pricing without prior notice, though confirmed paid orders will always be honoured at the price paid.<br><br>
 
-        <strong>3. Orders, Payment & Acceptance:</strong><br>
-        Our online storefront accepts orders 24/7. An order is only accepted and scheduled for baking once full payment has been successfully cleared via <strong>Paystack</strong>. If an item becomes unexpectedly unavailable, we will contact you via WhatsApp or email to offer a replacement flavour of equal or greater value or a full refund for that item.<br><br>
+        <strong>3. Orders, Payment &amp; Acceptance:</strong><br>
+        Our online storefront accepts orders 24/7. An order is only accepted and scheduled for baking once full payment has been successfully cleared via <strong>Paystack</strong>. If an item becomes unexpectedly unavailable, we will contact you via email to offer a replacement flavour of equal or greater value or a full refund for that item.<br><br>
 
         <strong>4. Cancellation Policy:</strong><br>
         Because dough preparation begins 24 hours prior to baking, orders may only be cancelled or modified <strong>before</strong> the applicable cutoff deadline (Monday 12:00 PM for Tuesday delivery; Wednesday 12:00 PM for Thursday delivery; Saturday 12:00 PM for Sunday market pickup). Once dough preparation or baking has commenced, orders are strictly non-refundable.<br><br>
 
-        <strong>5. Delivery, Risk & Failed Deliveries:</strong><br>
+        <strong>5. Delivery, Risk &amp; Failed Deliveries:</strong><br>
         Deliveries are fulfilled across Cape Town via third-party courier (Uber Package) on Tuesdays and Thursdays. Risk of loss or damage passes to the customer upon handover to the recipient or authorized security/reception at the provided delivery address. If a delivery fails due to an incorrect address, unreachable phone number, or no one being available to receive the parcel within 10 minutes of courier arrival, the parcel will be returned to our Tafelsig kitchen for collection, or a re-delivery fee will apply.<br><br>
 
-        <strong>6. Perishable Goods, Returns & Dispute Resolution:</strong><br>
+        <strong>6. Perishable Goods, Returns &amp; Dispute Resolution:</strong><br>
         In accordance with Section 16 and Section 44 of the South African Electronic Communications and Transactions Act (ECTA) and the Consumer Protection Act (CPA), perishable food products are exempt from cooling-off returns and cannot be returned or exchanged once delivered. If your order arrives damaged in transit or incorrect, please email <a href="mailto:disputes@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">disputes@thelittlebake.co.za</a> within <strong>2 hours</strong> of delivery with your order number and clear photographs so we can investigate and arrange a replacement batch or credit.<br><br>
 
         <strong>7. Limitation of Liability:</strong><br>
@@ -1007,7 +1438,7 @@
         <strong>8. Intellectual Property:</strong><br>
         All brand names, logos, cookie names, recipes, photography, and website content on <em>thelittlebake.co.za</em> remain the exclusive intellectual property of Abrahams Legacy Group (Pty) Ltd and may not be reproduced or used commercially without written permission.<br><br>
 
-        <strong>9. Privacy & POPIA Compliance:</strong><br>
+        <strong>9. Privacy &amp; POPIA Compliance:</strong><br>
         In compliance with South Africa’s Protection of Personal Information Act (POPIA), personal information collected at checkout (name, email, phone number, and delivery address) is used strictly to process your Paystack payment, coordinate Uber Package delivery, and send order notifications. We never sell, rent, or share customer data with unauthorized third parties.
       </div>
     </details>
@@ -1018,9 +1449,12 @@
 <footer class="site-footer">
   <div class="footer-grid">
     <div class="footer-col">
-      <h4>The Little Bake • Cape Town</h4>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <img src="Images/logo.jpeg" alt="The Little Bake" style="width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--caramel);" />
+        <h4 style="margin-bottom:0;">The Little Bake • Cape Town</h4>
+      </div>
       <p style="font-size:0.86rem; line-height:1.6;">
-        Handcrafted 100g gourmet cookies baked fresh in Cape Town. Find us every Sunday (10:00 AM – 3:00 PM) at <strong>Under the Tree Market, Constantia</strong>, or order online 24/7 for Tuesday & Thursday delivery.
+        Handcrafted 100g gourmet cookies baked fresh in Cape Town. Find us every Sunday (10:00 AM – 3:00 PM) at <strong>Under the Tree Market, Constantia</strong>, or order online 24/7 for Tuesday &amp; Thursday delivery.
       </p>
       <div class="social-row">
         <a href="https://www.instagram.com/the_little_bake" target="_blank" rel="noopener" class="social-pill">
@@ -1042,35 +1476,30 @@
       <h4>Contact Us</h4>
       <ul class="footer-links">
         <li>
-          <a href="mailto:orders@thelittlebake.co.za?subject=Order%20Inquiry%20-%20The%20Little%20Bake">
+          <a href="mailto:orders@thelittlebake.co.za?subject=Order%20Enquiry%20-%20The%20Little%20Bake">
             <i class="fa-solid fa-bag-shopping" style="color:var(--caramel)"></i> orders@thelittlebake.co.za
           </a>
         </li>
         <li>
-          <a href="mailto:support@thelittlebake.co.za?subject=Customer%20Support%20-%20The%20Little%20Bake">
+          <a href="mailto:support@thelittlebake.co.za?subject=Support%20Enquiry%20-%20The%20Little%20Bake">
             <i class="fa-solid fa-envelope" style="color:var(--caramel)"></i> support@thelittlebake.co.za
           </a>
         </li>
         <li>
-          <a href="mailto:disputes@thelittlebake.co.za?subject=Order%20Issue%20/%20Dispute%20-%20The%20Little%20Bake">
+          <a href="mailto:disputes@thelittlebake.co.za?subject=Order%20Issue%20-%20The%20Little%20Bake">
             <i class="fa-solid fa-circle-exclamation" style="color:var(--caramel)"></i> disputes@thelittlebake.co.za
-          </a>
-        </li>
-        <li>
-          <a href="https://wa.me/27662852858" target="_blank" rel="noopener">
-            <i class="fa-brands fa-whatsapp" style="color:var(--sage)"></i> +27 66 285 2858 (WhatsApp)
           </a>
         </li>
       </ul>
     </div>
 
     <div class="footer-col">
-      <h4>Policies & Legal</h4>
+      <h4>Policies &amp; Legal</h4>
       <ul class="footer-links">
-        <li><a href="#faq" onclick="jumpToFaq()">Tuesday & Thursday Delivery Cutoffs</a></li>
-        <li><a href="#faq" onclick="jumpToFaq()">Sugar, Allergen & Ingredient Notice</a></li>
-        <li><a href="#faq" onclick="jumpToFaq()">Terms & Conditions of Sale</a></li>
-        <li><a href="#faq" onclick="jumpToFaq()">Refund, Perishables & POPIA Policy</a></li>
+        <li><a href="#faq" onclick="jumpToFaq(); return false;">Tuesday &amp; Thursday Delivery Cutoffs</a></li>
+        <li><a href="#faq" onclick="jumpToFaq(); return false;">Sugar, Allergen &amp; Ingredient Notice</a></li>
+        <li><a href="#faq" onclick="jumpToFaq(); return false;">Terms &amp; Conditions of Sale</a></li>
+        <li><a href="#faq" onclick="jumpToFaq(); return false;">Refund, Perishables &amp; POPIA Policy</a></li>
       </ul>
     </div>
   </div>
@@ -1092,7 +1521,7 @@
     <div style="font-size:1.15rem; font-weight:800;" id="floatTotal">R0.00</div>
   </div>
   <div style="background:var(--caramel); padding:10px 20px; border-radius:99px; font-weight:800; font-size:0.9rem;">
-    Checkout & Pay <i class="fa-solid fa-arrow-right"></i>
+    Checkout &amp; Pay <i class="fa-solid fa-arrow-right"></i>
   </div>
 </div>
 
@@ -1101,7 +1530,7 @@
 <aside class="checkout-drawer" id="checkoutDrawer">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
     <h2 style="font-size:1.4rem;">Your Cookie Box</h2>
-    <button onclick="closeDrawer()" style="background:var(--bg-alt); border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1rem;">✕</button>
+    <button onclick="closeDrawer()" aria-label="Close Cart" style="background:var(--bg-alt); border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1rem;">✕</button>
   </div>
 
   <div class="free-ship-banner" id="freeShipBanner">
@@ -1110,11 +1539,13 @@
   </div>
 
   <div class="cutoff-notice">
-    <strong><i class="fa-regular fa-clock"></i> Delivery & Pickup Schedule:</strong><br>
-    • <strong>Tues Delivery:</strong> Order by Mon 12:00 PM<br>
-    • <strong>Thurs Delivery:</strong> Order Mon 12:01 PM – Wed 12:00 PM<br>
-    • <strong>Next Tues Delivery:</strong> Order Wed 12:01 PM – Mon 12:00 PM<br>
-    • <strong>Constantia Market Pickup:</strong> Sundays 10:00 AM – 3:00 PM
+    <strong><i class="fa-regular fa-clock"></i> Delivery &amp; Pickup Schedule:</strong><br />
+    • <strong>Tues Delivery:</strong> Order by Mon 12:00 PM<br />
+    • <strong>Thurs Delivery:</strong> Order Mon 12:01 PM – Wed 12:00 PM<br />
+    • <strong>Constantia Market Pickup:</strong> Sundays 10:00 AM – 3:00 PM (Order by Sat 12:00 PM)
+    <div>
+      <span class="scheduled-pill" id="scheduledDateBadge">Estimated Date: Calculating...</span>
+    </div>
   </div>
 
   <div id="drawerItemsList" style="margin-bottom:16px; border-top:1px solid var(--border); padding-top:12px;"></div>
@@ -1122,15 +1553,15 @@
   <form id="checkoutForm">
     <div class="form-field">
       <label>Full Name *</label>
-      <input type="text" id="custName" required placeholder="e.g. Ayesha Abrahams">
+      <input type="text" id="custName" required placeholder="e.g. Ayesha Abrahams" />
     </div>
     <div class="form-field">
       <label>Email Address (For Paystack Receipt) *</label>
-      <input type="email" id="custEmail" required placeholder="ayesha@example.com">
+      <input type="email" id="custEmail" required placeholder="ayesha@example.com" />
     </div>
     <div class="form-field">
-      <label>WhatsApp / Mobile Number *</label>
-      <input type="tel" id="custPhone" required placeholder="082 123 4567">
+      <label>Mobile Number (For Courier Tracking) *</label>
+      <input type="tel" id="custPhone" required placeholder="082 123 4567" />
     </div>
     <div class="form-field">
       <label>Pickup or Delivery Zone *</label>
@@ -1138,17 +1569,17 @@
         <option value="pickup_constantia" data-fee="0">Pickup — Constantia Sunday Market 10am–3pm (Free)</option>
         <option value="pickup_tafelsig" data-fee="0">Pickup — Tafelsig, Mitchells Plain (Free)</option>
         <option value="delivery_zone1" data-fee="75">Uber Delivery — Zone 1: Mitchells Plain / Philippi (R75)</option>
-        <option value="delivery_zone2" data-fee="115">Uber Delivery — Zone 2: Southern & Northern Suburbs (R115)</option>
+        <option value="delivery_zone2" data-fee="115">Uber Delivery — Zone 2: Southern &amp; Northern Suburbs (R115)</option>
         <option value="delivery_zone3" data-fee="150">Uber Delivery — Zone 3: CBD / Atlantic Seaboard (R150)</option>
       </select>
     </div>
     <div class="form-field" id="addrField" style="display:none;">
-      <label>Street Address & Suburb *</label>
-      <input type="text" id="custAddress" placeholder="House number, street, suburb">
+      <label>Street Address &amp; Suburb *</label>
+      <input type="text" id="custAddress" placeholder="House number, street name, suburb, postal code" />
     </div>
     <div class="form-field">
-      <label>Box Selection / Delivery Notes</label>
-      <textarea id="custNotes" rows="2" placeholder="If ordering a 6 or 12 box, list any flavor requests here..."></textarea>
+      <label>Box Flavor Preferences / Gift Note</label>
+      <textarea id="custNotes" rows="2" placeholder="If ordering a Mixed or Premium Box, list any specific molten/classic flavor preferences here..."></textarea>
     </div>
 
     <div id="totalsBreakdown" style="background:var(--bg); padding:14px; border-radius:12px; border:1px solid var(--border); font-size:0.9rem; margin-bottom:12px;"></div>
@@ -1157,162 +1588,285 @@
       <i class="fa-solid fa-lock"></i> <span id="payBtnText">Pay R0.00 Securely</span>
     </button>
     <p style="text-align:center; font-size:0.75rem; color:var(--muted); margin-top:8px;">
-      Instant 1-Click Payment via <strong>Paystack</strong> (Apple Pay, Card, SnapScan & EFT)
+      Instant 1-Click Payment via <strong>Paystack</strong> (Apple Pay, Card, SnapScan &amp; EFT)
     </p>
   </form>
 </aside>
 
+<!-- Post-Payment Confirmation Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <div style="width:64px; height:64px; border-radius:50%; background:var(--sage-bg); color:var(--sage); margin:0 auto 14px; display:flex; align-items:center; justify-content:center; font-size:1.8rem;">
+      <i class="fa-solid fa-check"></i>
+    </div>
+    <h2 style="font-size:1.65rem; margin-bottom:8px;">Order Confirmed!</h2>
+    <p style="color:var(--muted); font-size:0.9rem; line-height:1.55;">
+      Thank you for supporting <strong>The Little Bake</strong>. Your Paystack payment succeeded and your order has entered our baking schedule.
+    </p>
+    <div style="background:var(--bg); border:1px solid var(--border); border-radius:14px; padding:14px; margin:16px 0; font-size:0.84rem; text-align:left; line-height:1.6;">
+      <div><strong>Order Reference:</strong> <span id="modalRef"></span></div>
+      <div><strong>Amount Paid:</strong> <span id="modalAmount"></span></div>
+      <div><strong>Scheduled Date:</strong> <span id="modalDate"></span></div>
+    </div>
+    <a id="modalEmailLink" href="mailto:orders@thelittlebake.co.za" style="display:block; width:100%; background:var(--espresso); color:#fff; text-decoration:none; padding:13px; border-radius:12px; font-weight:800; font-size:0.88rem; margin-bottom:10px;">
+      <i class="fa-solid fa-envelope"></i> Email Order Copy to Us
+    </a>
+    <button onclick="closeSuccessModal()" style="width:100%; background:var(--bg-alt); color:var(--espresso); border:1px solid var(--border); padding:12px; border-radius:12px; font-weight:700; font-size:0.88rem; cursor:pointer;">
+      Continue Browsing
+    </button>
+  </div>
+</div>
+
 <script>
-  const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/REPLACE_WITH_YOUR_WEBHOOK_ID";
+  // ==========================================
+  // CONFIGURATION
+  // ==========================================
+  const PAYSTACK_PUBLIC_KEY = "pk_live_e1e8a5db431e7724af1728e7c7bf9546c99cbfad";
   const REVIEWS_WORKER_URL = "https://littlebake-reviews.shakespearespalace.workers.dev";
   const FREE_SHIP_MIN = 300;
 
-  const PRODUCTS = [
+  // Box Variant State (6 or 12)
+  const boxVariantState = {
+    "classic-box": 6,
+    "mixed-box": 6,
+    "premium-box": 6
+  };
+
+  // Option 2 Box Pricing: Save R10 on 6-packs, Save R30 on 12-packs
+  const BOX_GROUPS = [
     {
-      id: "mixed-delight-box",
-      name: "The Mixed Delight Box (6-Pack)",
+      id: "classic-box",
+      name: "The Classic Box",
       category: "boxes",
-      price: 220,
-      weight: "600g Box",
-      img: "images/mixed-box.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80",
-      desc: "3 Molten-Centered cookies + 3 Signature Classics packed in our windowed gift box."
+      img: "Images/Classic-Box.jpeg",
+      variants: {
+        6: {
+          sku: "The Classic Box (6)",
+          price: 200,
+          oldPrice: 210,
+          savings: 10,
+          weight: "600g • Save R10",
+          desc: "2 Classic Choc Chip, 2 Funfetti & 2 Banana Pudding cookies packed in our windowed gift box."
+        },
+        12: {
+          sku: "The Classic Box (12)",
+          price: 390,
+          oldPrice: 420,
+          savings: 30,
+          weight: "1.2kg • Free Delivery",
+          desc: "4 Classic Choc Chip, 4 Funfetti & 4 Banana Pudding cookies—automatically unlocks FREE delivery!"
+        }
+      }
     },
     {
-      id: "premium-party-box",
-      name: "The Premium Party Box (12-Pack)",
+      id: "mixed-box",
+      name: "The Mixed Box",
       category: "boxes",
-      price: 440,
-      weight: "1.2kg + Free Delivery",
-      img: "images/party-box.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=700&q=80",
-      desc: "Our ultimate 12-cookie assortment featuring every signature molten & classic flavor—automatically unlocks FREE delivery!"
+      img: "Images/Mixed-box.jpeg",
+      variants: {
+        6: {
+          sku: "The Mixed Box (6)",
+          price: 215,
+          oldPrice: 225,
+          savings: 10,
+          weight: "600g • Save R10",
+          desc: "Half & half: 3 Molten-Stuffed cookies + 3 Signature Classics packed in our windowed gift box."
+        },
+        12: {
+          sku: "The Mixed Box (12)",
+          price: 420,
+          oldPrice: 450,
+          savings: 30,
+          weight: "1.2kg • Free Delivery",
+          desc: "Half & half: 6 Molten-Stuffed cookies + 6 Signature Classics—automatically unlocks FREE delivery!"
+        }
+      }
     },
     {
-      id: "classic-taster-box",
-      name: "The Classic Taster Box (6-Pack)",
+      id: "premium-box",
+      name: "The Premium Box",
       category: "boxes",
-      price: 200,
-      weight: "600g Box",
-      img: "images/taster-box.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=700&q=80",
-      desc: "A dedicated 6-pack of our bestselling signature classic cookies."
-    },
+      img: "Images/Premium-box.jpeg",
+      variants: {
+        6: {
+          sku: "The Premium Box (6)",
+          price: 230,
+          oldPrice: 240,
+          savings: 10,
+          weight: "600g • Save R10",
+          desc: "6 loaded, gooey molten-centered signature cookies packed in our windowed gift box."
+        },
+        12: {
+          sku: "The Premium Box (12)",
+          price: 450,
+          oldPrice: 480,
+          savings: 30,
+          weight: "1.2kg • Free Delivery",
+          desc: "12 loaded, gooey molten-centered signature cookies—automatically unlocks FREE delivery!"
+        }
+      }
+    }
+  ];
+
+  // Single Products (Brownie Box + 7 Molten + 3 Classics; Strawberry Blush removed)
+  const SINGLE_PRODUCTS = [
     {
-      id: "brownies-slab",
-      name: "Chocolate Brownies Slab (Party Share)",
+      id: "chocolate-brownie-box",
+      name: "Chocolate Brownie Box",
       category: "boxes",
       price: 100,
-      weight: "Party Slab",
-      img: "images/brownies-slab.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=700&q=80",
-      desc: "Rich, fudgy multi-portion brownie slab finished with signature artisanal drizzles, perfect for groups."
+      oldPrice: null,
+      savings: 0,
+      weight: "Fudge Box",
+      img: "Images/Chocolate-brownie.jpeg",
+      desc: "Rich, fudgy bite-size chocolate brownies finished with real chocolate drizzles and biscuit crunch."
     },
     {
       id: "velvet-crush",
       name: "Velvet Crush",
       category: "molten",
       price: 40,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/velvet-crush.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1618923850107-d1a234d7a73a?auto=format&fit=crop&w=700&q=80",
+      img: "Images/RedVelvet.jpeg",
       desc: "Red velvet cocoa dough mixed with white chocolate chips and stuffed around a molten cream cheese frosting core."
     },
     {
       id: "midnight-espresso",
-      name: "The Midnight Espresso",
+      name: "Midnight Espresso",
       category: "molten",
       price: 40,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/midnight-espresso.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80",
-      desc: "Rich dark cocoa & espresso dough studded with white and dark chocolate chunks around an espresso cream cheese core."
+      img: "Images/Midnight-expresso.jpeg",
+      desc: "Rich dark cocoa & espresso dough studded with chocolate chunks around a velvety mocha-caramel core."
     },
     {
       id: "cookies-and-cream",
       name: "Cookies & Cream",
       category: "molten",
       price: 40,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/cookies-and-cream.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80",
-      desc: "Soft vanilla dough loaded with crushed Oreo chunks and white chocolate pieces, stuffed around a velvety Oreo cream cheese core."
+      img: "Images/Cookie&cream.jpeg",
+      desc: "Soft vanilla dough loaded with crushed Oreo chunks and white chocolate pieces around a creamy Oreo center."
     },
     {
       id: "triple-chocolate",
-      name: "Triple Chocolate Stuffed",
+      name: "Triple Chocolate",
       category: "molten",
       price: 40,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/triple-chocolate.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=700&q=80",
-      desc: "Decadent dark cocoa cookie loaded with white, milk, and dark chocolate chips wrapped around a molten chocolate spread center."
+      img: "Images/Tripple-chocolate.jpeg",
+      desc: "Decadent dark cocoa cookie loaded with white, milk, and dark chocolate wrapped around a molten ganache center."
     },
     {
       id: "monster-cookie",
-      name: "The Monster Cookie",
+      name: "Monster Cookie",
       category: "molten",
       price: 40,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/monster-cookie.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?auto=format&fit=crop&w=700&q=80",
-      desc: "Vibrant blue vanilla cookie dough packed with white and milk chocolate chips, stuffed with a cookies-and-cream center."
+      img: "Images/Monster.jpeg",
+      desc: "Vibrant blue vanilla cookie dough packed with chocolate chips and stuffed with a whole Oreo cookie inside."
     },
     {
       id: "nuttycrust-heart",
-      name: "The NuttyCrust Heart",
+      name: "NuttyCrust Heart",
       category: "molten",
       price: 40,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/nuttycrust-heart.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=700&q=80",
-      desc: "Golden brown-butter dough blended with roasted coconut biscuit crumbs and baked around a gooey caramel heart."
+      img: "Images/Nuttycrust-heart.jpeg",
+      desc: "Golden brown-butter dough blended with spiced caramelized biscuit crumbs around a gooey caramel heart."
     },
     {
       id: "the-smore",
       name: "The S'more",
       category: "molten",
       price: 40,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/the-smore.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=700&q=80",
-      desc: "Brown-sugar dough packed with chocolate chips, crunchy Marie biscuit chunks, and gooey marshmallows."
+      img: "Images/Smore.jpeg",
+      desc: "Brown-sugar dough packed with chocolate chips, crunchy biscuit chunks, and toasted stretchy marshmallows."
     },
     {
       id: "classic-choc-chip",
       name: "Classic Choc Chip",
       category: "classic",
       price: 35,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/classic-choc-chip.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=700&q=80",
+      img: "Images/Chochip.jpeg",
       desc: "Golden brown-butter dough loaded with generous semi-sweet chocolate chips."
+    },
+    {
+      id: "funfetti",
+      name: "Funfetti",
+      category: "classic",
+      price: 35,
+      oldPrice: null,
+      savings: 0,
+      weight: "100g",
+      img: "Images/Funfetti.jpeg",
+      desc: "Nostalgic birthday-cake vanilla cookie bursting with rainbow sprinkles and white chocolate."
     },
     {
       id: "banana-pudding",
       name: "Banana Pudding",
       category: "classic",
       price: 35,
+      oldPrice: null,
+      savings: 0,
       weight: "100g",
-      img: "images/banana-pudding.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=700&q=80",
-      desc: "Buttery vanilla pudding dough folded with crushed vanilla wafer biscuits."
-    },
-    {
-      id: "funfetti",
-      name: "The Funfetti",
-      category: "classic",
-      price: 35,
-      weight: "100g",
-      img: "images/funfetti.jpg",
-      fallbackImg: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?auto=format&fit=crop&w=700&q=80",
-      desc: "Nostalgic birthday-cake vanilla cookie bursting with rainbow sprinkles."
+      img: "Images/Banana-pudding.jpeg",
+      desc: "Buttery vanilla-banana cookie finished with white chocolate drizzle and crushed shortbread crumble."
     }
   ];
 
-  let activeCategory = "all";
-  const cart = {};
+  // Lookup map of all purchasable SKUs (including 6 & 12 variants)
+  function getCatalogMap() {
+    const map = {};
+    BOX_GROUPS.forEach(group => {
+      [6, 12].forEach(size => {
+        const v = group.variants[size];
+        const key = `${group.id}-${size}`;
+        map[key] = {
+          key,
+          name: v.sku,
+          price: v.price,
+          savings: v.savings,
+          img: group.img
+        };
+      });
+    });
+    SINGLE_PRODUCTS.forEach(p => {
+      map[p.id] = {
+        key: p.id,
+        name: p.name,
+        price: p.price,
+        savings: p.savings || 0,
+        img: p.img
+      };
+    });
+    return map;
+  }
 
+  let activeCategory = "all";
+  const cart = {}; // { skuKey: qty }
+
+  // ==========================================
+  // NAVIGATION & FILTERING
+  // ==========================================
   function switchPage(pageId, btnEl) {
     document.querySelectorAll(".page-view").forEach(p => p.classList.remove("active"));
     document.getElementById(`page-${pageId}`).classList.add("active");
@@ -1337,18 +1891,83 @@
     renderProducts();
   }
 
+  function setBoxVariant(groupId, size) {
+    boxVariantState[groupId] = size;
+    renderProducts();
+  }
+
+  // ==========================================
+  // RENDER PRODUCT CARDS
+  // ==========================================
   function renderProducts() {
     const query = (document.getElementById("searchInput").value || "").toLowerCase();
     const grid = document.getElementById("productGrid");
     grid.innerHTML = "";
 
-    PRODUCTS.filter(p => {
+    // 1. Render 6/12 Variant Boxes first when matching
+    if (activeCategory === "all" || activeCategory === "boxes") {
+      BOX_GROUPS.forEach(group => {
+        const size = boxVariantState[group.id];
+        const v = group.variants[size];
+        const matchSearch =
+          group.name.toLowerCase().includes(query) ||
+          v.desc.toLowerCase().includes(query);
+        if (!matchSearch) return;
+
+        const skuKey = `${group.id}-${size}`;
+        const qty = cart[skuKey] || 0;
+
+        const actionHtml = qty > 0
+          ? `<div class="qty-control">
+               <button type="button" class="qty-btn" onclick="changeQty('${skuKey}', -1)">−</button>
+               <span class="qty-num">${qty}</span>
+               <button type="button" class="qty-btn plus" onclick="changeQty('${skuKey}', 1)">+</button>
+             </div>`
+          : `<button type="button" class="btn-add" onclick="changeQty('${skuKey}', 1)">+ Add Box</button>`;
+
+        const card = document.createElement("div");
+        card.className = "cookie-card";
+        card.innerHTML = `
+          <div class="cookie-img-wrap">
+            <span class="tag-pill box">Value Box</span>
+            <span class="save-pill">Save R${v.savings}</span>
+            <span class="weight-pill">${v.weight}</span>
+            <img src="${group.img}" alt="${v.sku}" />
+          </div>
+          <div class="cookie-content">
+            <div>
+              <h3 class="cookie-title">${group.name}</h3>
+              <p class="cookie-desc">${v.desc}</p>
+              <div class="variant-toggle">
+                <button type="button" class="variant-btn ${size === 6 ? 'active' : ''}" onclick="setBoxVariant('${group.id}', 6)">
+                  6-Pack (R${group.variants[6].price})
+                </button>
+                <button type="button" class="variant-btn ${size === 12 ? 'active' : ''}" onclick="setBoxVariant('${group.id}', 12)">
+                  12-Pack (R${group.variants[12].price})
+                </button>
+              </div>
+            </div>
+            <div class="cookie-bottom">
+              <div class="price-stack">
+                <span class="cookie-price">R${v.price}</span>
+                <span class="cookie-old-price">R${v.oldPrice}</span>
+              </div>
+              ${actionHtml}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // 2. Render Brownies + Individual Cookies
+    SINGLE_PRODUCTS.filter(p => {
       const matchCat = activeCategory === "all" || p.category === activeCategory;
       const matchSearch = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
       return matchCat && matchSearch;
     }).forEach(p => {
       const qty = cart[p.id] || 0;
-      const badgeLabel = p.category === "boxes" ? "Gift Box" : (p.category === "molten" ? "Molten Core" : "Classic");
+      const badgeLabel = p.category === "boxes" ? "Fudge Box" : (p.category === "molten" ? "Molten Core" : "Classic");
       const badgeClass = p.category === "boxes" ? "box" : (p.category === "molten" ? "molten" : "");
 
       const actionHtml = qty > 0
@@ -1365,7 +1984,7 @@
         <div class="cookie-img-wrap">
           <span class="tag-pill ${badgeClass}">${badgeLabel}</span>
           <span class="weight-pill">${p.weight}</span>
-          <img src="${p.img}" alt="${p.name}" onerror="this.onerror=null; this.src='${p.fallbackImg}';">
+          <img src="${p.img}" alt="${p.name}" />
         </div>
         <div class="cookie-content">
           <div>
@@ -1382,44 +2001,109 @@
     });
   }
 
-  function changeQty(id, delta) {
-    cart[id] = Math.max(0, (cart[id] || 0) + delta);
-    if (cart[id] === 0) delete cart[id];
+  // ==========================================
+  // SCHEDULED DISPATCH / PICKUP DATE (SAST)
+  // ==========================================
+  function getNextScheduledDate(methodValue) {
+    // Current date/time in South Africa (UTC+2)
+    const now = new Date();
+    const sastString = now.toLocaleString("en-US", { timeZone: "Africa/Johannesburg" });
+    const sast = new Date(sastString);
+    const day = sast.getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+    const hour = sast.getHours();
+
+    const target = new Date(sast);
+    target.setHours(0, 0, 0, 0);
+
+    if (methodValue === "pickup_constantia") {
+      // Constantia Sunday Market: order by Sat 12:00 PM for this Sunday, else next Sunday
+      let daysUntilSunday = (7 - day) % 7;
+      if (daysUntilSunday === 0 || (day === 6 && hour >= 12)) {
+        daysUntilSunday += 7;
+      }
+      target.setDate(target.getDate() + daysUntilSunday);
+    } else {
+      // Tues & Thurs schedule:
+      // Mon <= 12:00 -> Tuesday (day 2)
+      // Mon > 12:00 to Wed <= 12:00 -> Thursday (day 4)
+      // Wed > 12:00 to Sun -> Following Tuesday (day 2)
+      if (day === 1 && hour < 12) {
+        target.setDate(target.getDate() + 1); // Tuesday
+      } else if ((day === 1 && hour >= 12) || day === 2 || (day === 3 && hour < 12)) {
+        const daysUntilThu = (4 - day + 7) % 7;
+        target.setDate(target.getDate() + daysUntilThu); // Thursday
+      } else {
+        const daysUntilTue = (2 - day + 7) % 7 || 7;
+        target.setDate(target.getDate() + daysUntilTue); // Next Tuesday
+      }
+    }
+
+    const yyyy = target.getFullYear();
+    const mm = String(target.getMonth() + 1).padStart(2, "0");
+    const dd = String(target.getDate()).padStart(2, "0");
+    const readable = target.toLocaleDateString("en-ZA", {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    });
+
+    return { iso: `${yyyy}-${mm}-${dd}`, readable };
+  }
+
+  // ==========================================
+  // CART & DELIVERY CALCULATION
+  // ==========================================
+  function changeQty(skuKey, delta) {
+    cart[skuKey] = Math.max(0, (cart[skuKey] || 0) + delta);
+    if (cart[skuKey] === 0) delete cart[skuKey];
     renderProducts();
     updateCartUI();
   }
 
   function updateCartUI() {
+    const catalog = getCatalogMap();
     let count = 0;
     let subtotal = 0;
+    let totalSavings = 0;
     let listHtml = "";
 
-    Object.entries(cart).forEach(([id, qty]) => {
-      const p = PRODUCTS.find(x => x.id === id);
-      const line = p.price * qty;
+    Object.entries(cart).forEach(([skuKey, qty]) => {
+      const item = catalog[skuKey];
+      if (!item) return;
+      const line = item.price * qty;
       count += qty;
       subtotal += line;
+      totalSavings += (item.savings || 0) * qty;
+
       listHtml += `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--border);">
-          <div>
-            <strong style="font-size:0.9rem;">${p.name}</strong>
-            <div style="font-size:0.78rem; color:var(--muted);">R${p.price} × ${qty}</div>
-          </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 0; border-bottom:1px dashed var(--border);">
           <div style="display:flex; align-items:center; gap:10px;">
-            <strong>R${line}</strong>
-            <button type="button" onclick="changeQty('${p.id}', -1)" style="border:none; background:var(--bg-alt); width:26px; height:26px; border-radius:50%; cursor:pointer;">−</button>
-            <button type="button" onclick="changeQty('${p.id}', 1)" style="border:none; background:var(--caramel); color:#fff; width:26px; height:26px; border-radius:50%; cursor:pointer;">+</button>
+            <img src="${item.img}" alt="${item.name}" style="width:46px; height:46px; border-radius:10px; object-fit:cover;" />
+            <div>
+              <strong style="font-size:0.88rem; display:block;">${item.name}</strong>
+              <span style="font-size:0.76rem; color:var(--muted);">R${item.price} × ${qty}</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <strong style="font-size:0.9rem;">R${line}</strong>
+            <button type="button" onclick="changeQty('${skuKey}', -1)" style="border:none; background:var(--bg-alt); width:26px; height:26px; border-radius:50%; cursor:pointer; font-weight:800;">−</button>
+            <button type="button" onclick="changeQty('${skuKey}', 1)" style="border:none; background:var(--caramel); color:#fff; width:26px; height:26px; border-radius:50%; cursor:pointer; font-weight:800;">+</button>
           </div>
         </div>`;
     });
 
-    document.getElementById("drawerItemsList").innerHTML = listHtml || `<p style="color:var(--muted); font-size:0.9rem;">Your cookie box is empty.</p>`;
+    document.getElementById("drawerItemsList").innerHTML =
+      listHtml || `<p style="color:var(--muted); font-size:0.9rem;">Your cookie box is empty. Add a box or single cookies to get started.</p>`;
 
     const sel = document.getElementById("custMethod");
     const opt = sel.options[sel.selectedIndex];
     const isDelivery = sel.value.startsWith("delivery_");
     document.getElementById("addrField").style.display = isDelivery ? "block" : "none";
     document.getElementById("custAddress").required = isDelivery;
+
+    const sched = getNextScheduledDate(sel.value);
+    document.getElementById("scheduledDateBadge").textContent = `Scheduled Date: ${sched.readable}`;
 
     const baseFee = Number(opt.getAttribute("data-fee")) || 0;
     const isFreeUnlocked = subtotal >= FREE_SHIP_MIN;
@@ -1428,7 +2112,7 @@
 
     document.getElementById("headerCartCount").textContent = count;
     document.getElementById("headerCartTotal").textContent = `R${grandTotal}`;
-    document.getElementById("floatItems").textContent = `${count} Item${count === 1 ? '' : 's'} in Box`;
+    document.getElementById("floatItems").textContent = `${count} Item${count === 1 ? "" : "s"} in Box`;
     document.getElementById("floatTotal").textContent = `R${grandTotal.toFixed(2)}`;
     document.getElementById("floatingCart").classList.toggle("visible", count > 0);
 
@@ -1436,6 +2120,7 @@
     document.getElementById("freeShipFill").style.width = `${pct}%`;
     const banner = document.getElementById("freeShipBanner");
     const label = document.getElementById("freeShipLabel");
+
     if (isFreeUnlocked) {
       banner.classList.add("unlocked");
       label.innerHTML = `<i class="fa-solid fa-circle-check"></i> You unlocked <strong>FREE Cape Town Delivery!</strong>`;
@@ -1444,14 +2129,27 @@
       label.innerHTML = `Add <strong>R${FREE_SHIP_MIN - subtotal}</strong> more to unlock <strong>FREE Delivery</strong>!`;
     }
 
+    const savingsLine = totalSavings > 0
+      ? `<div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--sage); font-weight:700;"><span>Box Bundle Savings</span><span>-R${totalSavings.toFixed(2)}</span></div>`
+      : "";
+
     document.getElementById("totalsBreakdown").innerHTML = `
       <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Items Subtotal</span><span>R${subtotal.toFixed(2)}</span></div>
-      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Delivery / Collection</span><span>${isDelivery && isFreeUnlocked ? 'FREE' : 'R' + shippingFee.toFixed(2)}</span></div>
-      <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.05rem; border-top:1px solid var(--border); padding-top:8px;"><span>Total</span><span>R${grandTotal.toFixed(2)}</span></div>
+      ${savingsLine}
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Delivery / Collection</span><span>${isDelivery ? (isFreeUnlocked ? 'FREE' : 'R' + shippingFee.toFixed(2)) : 'FREE (Pickup)'}</span></div>
+      <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.05rem; border-top:1px solid var(--border); padding-top:8px;"><span>Total Due</span><span>R${grandTotal.toFixed(2)}</span></div>
     `;
     document.getElementById("payBtnText").textContent = `Pay R${grandTotal.toFixed(2)} Securely`;
 
-    return { count, subtotal, shippingFee, grandTotal, methodText: opt.text };
+    return {
+      count,
+      subtotal,
+      shippingFee,
+      grandTotal,
+      methodText: opt.text,
+      scheduledIso: sched.iso,
+      scheduledReadable: sched.readable
+    };
   }
 
   function openDrawer() {
@@ -1465,58 +2163,93 @@
     document.getElementById("checkoutDrawer").classList.remove("active");
   }
 
-  document.getElementById("checkoutForm").addEventListener("submit", async function(e) {
+  function closeSuccessModal() {
+    document.getElementById("successModal").classList.remove("active");
+  }
+
+  // ==========================================
+  // PAYSTACK INLINE CHECKOUT (LIVE)
+  // ==========================================
+  document.getElementById("checkoutForm").addEventListener("submit", function(e) {
     e.preventDefault();
     const totals = updateCartUI();
     if (totals.count === 0) return;
 
-    const btn = document.getElementById("payNowBtn");
-    btn.disabled = true;
-    document.getElementById("payBtnText").textContent = "Redirecting to Paystack...";
+    const catalog = getCatalogMap();
+    const custName = document.getElementById("custName").value.trim();
+    const custEmail = document.getElementById("custEmail").value.trim();
+    const custPhone = document.getElementById("custPhone").value.trim();
+    const custAddress = document.getElementById("custAddress").value.trim();
+    const custNotes = document.getElementById("custNotes").value.trim();
 
-    const orderNumber = `TLB-${Math.floor(10000 + Math.random() * 90000)}`;
-    const itemsOrdered = Object.entries(cart).map(([id, qty]) => {
-      const p = PRODUCTS.find(x => x.id === id);
-      return `${qty}x ${p.name} (R${p.price * qty})`;
+    const orderNumber = `TLB-${Date.now().toString().slice(-6)}`;
+    const itemsOrdered = Object.entries(cart).map(([skuKey, qty]) => {
+      const item = catalog[skuKey];
+      return `${qty} x ${item.name}`;
     }).join("\n");
 
-    const payload = {
-      orderDate: new Date().toISOString().split("T")[0],
-      orderNumber,
-      customerName: document.getElementById("custName").value.trim(),
-      customerEmail: document.getElementById("custEmail").value.trim(),
-      phoneNumber: document.getElementById("custPhone").value.replace(/\D/g, ""),
-      itemsOrdered,
-      subtotal: totals.subtotal.toFixed(2),
-      deliveryFee: totals.shippingFee.toFixed(2),
-      totalPrice: totals.grandTotal.toFixed(2),
-      amountInCents: Math.round(totals.grandTotal * 100),
-      deliveryCollection: document.getElementById("custAddress").value
-        ? `${totals.methodText} — ${document.getElementById("custAddress").value.trim()}`
-        : totals.methodText,
-      notes: document.getElementById("custNotes").value.trim(),
-      callbackUrl: window.location.href.split("?")[0]
-    };
+    const deliveryCollection = custAddress
+      ? `${totals.methodText} — ${custAddress}`
+      : totals.methodText;
 
-    try {
-      const res = await fetch(MAKE_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      if (data && data.authorization_url) {
-        window.location.href = data.authorization_url;
-        return;
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: custEmail,
+      amount: Math.round(totals.grandTotal * 100), // ZAR cents
+      currency: "ZAR",
+      ref: orderNumber,
+      metadata: {
+        customer_name: custName,
+        customer_phone: custPhone,
+        items_summary: itemsOrdered,
+        fulfilment_details: deliveryCollection,
+        scheduled_date: totals.scheduledIso,
+        delivery_fee: totals.shippingFee.toFixed(2),
+        order_notes: custNotes || "None",
+        custom_fields: [
+          { display_name: "Customer Name", variable_name: "customer_name", value: custName },
+          { display_name: "Phone Number", variable_name: "customer_phone", value: custPhone },
+          { display_name: "Items Ordered", variable_name: "items_summary", value: itemsOrdered },
+          { display_name: "Delivery / Collection", variable_name: "fulfilment_details", value: deliveryCollection },
+          { display_name: "Scheduled Date", variable_name: "scheduled_date", value: totals.scheduledIso }
+        ]
+      },
+      callback: function(response) {
+        // Payment confirmed by Paystack; webhook triggers Make.com -> Google Sheets
+        document.getElementById("modalRef").textContent = response.reference;
+        document.getElementById("modalAmount").textContent = `R${totals.grandTotal.toFixed(2)}`;
+        document.getElementById("modalDate").textContent = totals.scheduledReadable;
+
+        const mailSubject = encodeURIComponent(`Paid Online Order ${response.reference} - ${custName}`);
+        const mailBody = encodeURIComponent(
+          `Order Reference: ${response.reference}\n` +
+          `Customer: ${custName} (${custPhone})\n` +
+          `Items:\n${itemsOrdered}\n\n` +
+          `Total Paid: R${totals.grandTotal.toFixed(2)}\n` +
+          `Fulfilment: ${deliveryCollection}\n` +
+          `Scheduled Date: ${totals.scheduledReadable}\n` +
+          `Notes: ${custNotes || "None"}`
+        );
+        document.getElementById("modalEmailLink").href = `mailto:orders@thelittlebake.co.za?subject=${mailSubject}&body=${mailBody}`;
+
+        // Clear cart
+        Object.keys(cart).forEach(k => delete cart[k]);
+        renderProducts();
+        updateCartUI();
+        closeDrawer();
+        document.getElementById("successModal").classList.add("active");
+      },
+      onClose: function() {
+        // Customer closed popup before paying; cart remains intact
       }
-      throw new Error("Missing Paystack URL");
-    } catch (err) {
-      alert("Checkout connection error. Ensure your Make.com Webhook URL is pasted into MAKE_WEBHOOK_URL.");
-      btn.disabled = false;
-      updateCartUI();
-    }
+    });
+
+    handler.openIframe();
   });
 
+  // ==========================================
+  // LIVE GOOGLE REVIEWS LOADER
+  // ==========================================
   async function loadLiveGoogleReviews() {
     try {
       const res = await fetch(REVIEWS_WORKER_URL);
@@ -1578,10 +2311,10 @@
     }
   }
 
+  // Initialize Storefront
   renderProducts();
   updateCartUI();
   loadLiveGoogleReviews();
 </script>
-
 </body>
 </html>
