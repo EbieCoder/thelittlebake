@@ -50,7 +50,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
       color: var(--espresso);
-      padding-bottom: 100px;
+      padding-bottom: 0;
       overflow-x: hidden;
     }
 
@@ -805,20 +805,21 @@
       font-weight: 800;
     }
 
-    /* FOOTER */
+/* FOOTER */
     .site-footer {
-      max-width: 1140px;
-      margin: 40px auto 0;
-      padding: 36px 20px 24px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
+      background: var(--espresso);
+      color: rgba(253, 251, 247, 0.84);
+      margin-top: 56px;
+      padding: 44px 20px 96px;
+      border-top: 3px solid var(--caramel);
     }
 
     .footer-grid {
+      max-width: 1140px;
+      margin: 0 auto 28px;
       display: grid;
       grid-template-columns: 1.2fr 1fr 1fr;
       gap: 28px;
-      margin-bottom: 28px;
     }
 
     @media (max-width: 780px) {
@@ -828,7 +829,7 @@
     }
 
     .footer-col h4 {
-      color: var(--espresso);
+      color: var(--gold);
       font-size: 0.95rem;
       font-weight: 800;
       margin-bottom: 12px;
@@ -845,7 +846,7 @@
     }
 
     .footer-links a {
-      color: var(--espresso);
+      color: #FDFBF7;
       text-decoration: none;
       font-weight: 600;
       display: inline-flex;
@@ -855,7 +856,7 @@
     }
 
     .footer-links a:hover {
-      color: var(--caramel);
+      color: var(--gold);
     }
 
     .social-row {
@@ -869,9 +870,9 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      background: #fff;
-      border: 1px solid var(--border);
-      color: var(--espresso);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #FDFBF7;
       padding: 8px 14px;
       border-radius: 99px;
       font-size: 0.82rem;
@@ -881,20 +882,27 @@
     }
 
     .social-pill:hover {
-      background: var(--espresso);
+      background: var(--caramel);
       color: #fff;
-      border-color: var(--espresso);
+      border-color: var(--caramel);
     }
 
     .footer-bottom {
+      max-width: 1140px;
+      margin: 0 auto;
       padding-top: 18px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
       font-size: 0.78rem;
+      color: rgba(253, 251, 247, 0.75);
+    }
+
+    .footer-bottom strong {
+      color: #FDFBF7;
     }
 
     /* FLOATING CART & DRAWER */
@@ -1426,8 +1434,8 @@
         <strong>4. Cancellation Policy:</strong><br>
         Because dough preparation begins 24 hours prior to baking, orders may only be cancelled or modified <strong>before</strong> the applicable cutoff deadline (Monday 12:00 PM for Tuesday delivery; Wednesday 12:00 PM for Thursday delivery; Saturday 12:00 PM for Sunday market pickup). Once dough preparation or baking has commenced, orders are strictly non-refundable.<br><br>
 
-        <strong>5. Delivery, Risk &amp; Failed Deliveries:</strong><br>
-        Deliveries are fulfilled across Cape Town via third-party courier (Uber Package) on Tuesdays and Thursdays. Risk of loss or damage passes to the customer upon handover to the recipient or authorized security/reception at the provided delivery address. If a delivery fails due to an incorrect address, unreachable phone number, or no one being available to receive the parcel within 10 minutes of courier arrival, the parcel will be returned to our Tafelsig kitchen for collection, or a re-delivery fee will apply.<br><br>
+        <strong>5. Delivery, Risk &amp; Failed Deliveries:</strong><br />
+        Deliveries are fulfilled across Cape Town via third-party courier (Uber Package) on Tuesdays and Thursdays. For orders under R300, customers must select the delivery zone matching their destination suburb; if an incorrect zone is selected at checkout, dispatch will be held until the delivery fee difference is settled (or the customer elects free Tafelsig/Constantia pickup). Risk of loss or damage passes to the customer upon handover to the recipient or authorized security/reception at the provided delivery address. If a delivery fails due to an incorrect address, unreachable phone number, or no one being available to receive the parcel within 10 minutes of courier arrival, the parcel will be returned to our Tafelsig kitchen for collection, or a re-delivery fee will apply.<br /><br />
 
         <strong>6. Perishable Goods, Returns &amp; Dispute Resolution:</strong><br>
         In accordance with Section 16 and Section 44 of the South African Electronic Communications and Transactions Act (ECTA) and the Consumer Protection Act (CPA), perishable food products are exempt from cooling-off returns and cannot be returned or exchanged once delivered. If your order arrives damaged in transit or incorrect, please email <a href="mailto:disputes@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">disputes@thelittlebake.co.za</a> within <strong>2 hours</strong> of delivery with your order number and clear photographs so we can investigate and arrange a replacement batch or credit.<br><br>
