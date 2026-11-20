@@ -1578,7 +1578,7 @@
       <input type="tel" id="custPhone" required placeholder="082 123 4567" />
     </div>
     <div class="form-field">
-      <label>Pickup or Delivery Zone *</label>
+      <label>Pickup or Delivery *</label>
       <select id="custMethod" onchange="updateCartUI()">
         <option value="pickup_constantia" data-fee="0">Pickup — Constantia Sunday Market 10am–3pm (Free)</option>
         <option value="pickup_tafelsig" data-fee="0">Pickup — Tafelsig, Mitchells Plain (Free)</option>
@@ -1588,8 +1588,9 @@
       </select>
     </div>
     <div class="form-field" id="addrField" style="display:none;">
-      <label>Street Address &amp; Suburb *</label>
-      <input type="text" id="custAddress" placeholder="House number, street name, suburb, postal code" />
+      <label>Street Address, Suburb &amp; Postal Code *</label>
+      <input type="text" id="custAddress" oninput="detectDeliveryZone()" placeholder="e.g. 14 Main Rd, Rondebosch, 7700" />
+      <div id="zoneDetectHint" style="font-size:0.76rem; margin-top:5px; font-weight:700; color:var(--sage);"></div>
     </div>
     <div class="form-field">
       <label>Box Flavor Preferences / Gift Note</label>
@@ -2068,6 +2069,88 @@
     renderProducts();
     updateCartUI();
   }
+  // ==========================================
+  // CAPE TOWN DELIVERY ZONE AUTO-DETECTOR
+  // ==========================================
+  const ZONE_RULES = [
+    {
+      zone: "delivery_zone1",
+      label: "Zone 1: Mitchells Plain / Philippi (R75)",
+      keywords: [
+        "mitchells plain", "mitchell's plain", "tafelsig", "westridge", "rocklands",
+        "portlands", "beacon valley", "eastridge", "lentegeur", "woodlands",
+        "strandfontein", "colorado", "weltevreden", "mandalay", "philippi",
+        "7785", "7798", "7788", "7750"
+      ]
+    },
+    {
+      zone: "delivery_zone3",
+      label: "Zone 3: CBD / Atlantic Seaboard / West Coast (R150)",
+      keywords: [
+        "cape town", "cbd", "city bowl", "gardens", "tamboerskloof", "oranjezicht",
+        "vredehoek", "woodstock", "salt river", "observatory", "sea point",
+        "green point", "three anchor bay", "mouille point", "bantry bay", "clifton",
+        "camps bay", "fresnaye", "bakoven", "llandudno", "hout bay", "blouberg",
+        "table view", "milnerton", "parklands", "sunningdale", "century city",
+        "8000", "8001", "8005", "8040", "8051", "8060", "7925", "7441", "7439"
+      ]
+    },
+    {
+      zone: "delivery_zone2",
+      label: "Zone 2: Southern & Northern Suburbs (R115)",
+      keywords: [
+        "rondebosch", "newlands", "claremont", "kenilworth", "wynberg", "plumstead",
+        "constantia", "tokai", "bergvliet", "meadowridge", "diep river", "retreat",
+        "steenberg", "muizenberg", "kalk bay", "fish hoek", "athlone", "lansdowne",
+        "crawford", "rylands", "gatesville", "hatfield", "pinelands", "thornton",
+        "goodwood", "parow", "bellville", "durbanville", "brackenfell", "kuils river",
+        "ottery", "wetton", "grassy park", "lotus river", "zeekoevlei", "pelican park",
+        "7700", "7708", "7800", "7806", "7945", "7975", "7764", "7780", "7405",
+        "7460", "7500", "7530", "7550", "7560", "7580", "7941"
+      ]
+    }
+  ];
+
+  function detectDeliveryZone(forceOverride = false) {
+    const sel = document.getElementById("custMethod");
+    const hint = document.getElementById("zoneDetectHint");
+    if (!sel.value.startsWith("delivery_")) {
+      if (hint) hint.textContent = "";
+      return null;
+    }
+
+    const raw = (document.getElementById("custAddress").value || "").toLowerCase().trim();
+    if (!raw) {
+      if (hint) hint.textContent = "Enter your suburb or 4-digit postal code to auto-select your Cape Town zone.";
+      return null;
+    }
+
+    let matched = null;
+    for (const rule of ZONE_RULES) {
+      if (rule.keywords.some(kw => raw.includes(kw))) {
+        matched = rule;
+        break;
+      }
+    }
+
+    if (matched) {
+      if (sel.value !== matched.zone || forceOverride) {
+        sel.value = matched.zone;
+        updateCartUI();
+      }
+      if (hint) {
+        hint.style.color = "var(--sage)";
+        hint.innerHTML = `<i class="fa-solid fa-location-dot"></i> Auto-matched: ${matched.label}`;
+      }
+      return matched.zone;
+    } else {
+      if (hint) {
+        hint.style.color = "var(--caramel)";
+        hint.innerHTML = `<i class="fa-solid fa-circle-info"></i> Tip: Include your suburb or 4-digit postal code (e.g. Claremont 7708) to verify your zone.`;
+      }
+      return null;
+    }
+  }
 
   function updateCartUI() {
     const catalog = getCatalogMap();
@@ -2185,6 +2268,7 @@
   // ==========================================
   document.getElementById("checkoutForm").addEventListener("submit", function(e) {
     e.preventDefault();
+    detectDeliveryZone(true);
     const totals = updateCartUI();
     if (totals.count === 0) return;
 
