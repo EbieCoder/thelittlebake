@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <!-- Paystack Inline Checkout SDK -->
-  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script src="https://js.paystack.co/v2/inline.js"></script>
 
   <style>
     :root {
@@ -2207,12 +2207,13 @@
       : totals.methodText;
     const flavorsNotes = custNotes || "Standard Assortment";
 
-    const handler = PaystackPop.setup({
+    const paystack = new PaystackPop();
+    paystack.checkout({
       key: PAYSTACK_PUBLIC_KEY,
       email: custEmail,
       amount: Math.round(totals.grandTotal * 100), // ZAR cents
       currency: "ZAR",
-      ref: orderNumber,
+      reference: orderNumber,
       metadata: {
         customer_name: custName,
         customer_phone: custPhone,
@@ -2234,7 +2235,7 @@
           { display_name: "Scheduled Date", variable_name: "scheduled_date", value: totals.scheduledReadable }
         ]
       },
-      callback: function(response) {
+      onSuccess: (response) => {
         document.getElementById("modalRef").textContent = response.reference;
         document.getElementById("modalAmount").textContent = `R${totals.grandTotal.toFixed(2)}`;
         document.getElementById("modalDate").textContent = totals.scheduledReadable;
@@ -2257,13 +2258,10 @@
         closeDrawer();
         document.getElementById("successModal").classList.add("active");
       },
-      onClose: function() {
+      onCancel: () => {
         // Customer closed popup before paying; cart remains intact
       }
     });
-
-    handler.openIframe();
-  });
 
   // ==========================================
   // LIVE GOOGLE REVIEWS LOADER
