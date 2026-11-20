@@ -1441,7 +1441,7 @@
         Because dough preparation begins 24 hours prior to baking, orders may only be cancelled or modified <strong>before</strong> the applicable cutoff deadline (Monday 12:00 PM for Tuesday delivery; Wednesday 12:00 PM for Thursday delivery; Saturday 12:00 PM for Sunday market pickup). Once dough preparation or baking has commenced, orders are strictly non-refundable.<br><br>
 
         <strong>5. Delivery, Risk &amp; Failed Deliveries:</strong><br />
-        Deliveries are fulfilled across Cape Town via third-party courier (Uber Package) on Tuesdays and Thursdays. For orders under R300, customers must select the delivery zone matching their destination suburb; if an incorrect zone is selected at checkout, dispatch will be held until the delivery fee difference is settled (or the customer elects free Tafelsig/Constantia pickup). Risk of loss or damage passes to the customer upon handover to the recipient or authorized security/reception at the provided delivery address. If a delivery fails due to an incorrect address, unreachable phone number, or no one being available to receive the parcel within 10 minutes of courier arrival, the parcel will be returned to our Tafelsig kitchen for collection, or a re-delivery fee will apply.<br /><br />
+        Deliveries are fulfilled across Cape Town via third-party courier (Uber Package) on Tuesdays and Thursdays. For orders under R300, customers must select the delivery suburb matching their destination address; if an incorrect suburb is selected at checkout, dispatch will be held until the delivery fee difference is settled (or the customer elects free Tafelsig/Constantia pickup). Risk of loss or damage passes to the customer upon handover to the recipient or authorized security/reception at the provided delivery address. If a delivery fails due to an incorrect address, unreachable phone number, or no one being available to receive the parcel within 10 minutes of courier arrival, the parcel will be returned to our Tafelsig kitchen for collection, or a re-delivery fee will apply.<br /><br />
 
         <strong>6. Perishable Goods, Returns &amp; Dispute Resolution:</strong><br>
         In accordance with Section 16 and Section 44 of the South African Electronic Communications and Transactions Act (ECTA) and the Consumer Protection Act (CPA), perishable food products are exempt from cooling-off returns and cannot be returned or exchanged once delivered. If your order arrives damaged in transit or incorrect, please email <a href="mailto:disputes@thelittlebake.co.za" style="color:var(--caramel); font-weight:700;">disputes@thelittlebake.co.za</a> within <strong>2 hours</strong> of delivery with your order number and clear photographs so we can investigate and arrange a replacement batch or credit.<br><br>
@@ -1578,20 +1578,50 @@
       <input type="tel" id="custPhone" required placeholder="082 123 4567" />
     </div>
     <div class="form-field">
-      <label>Pickup or Delivery *</label>
+      <label>Fulfilment Option *</label>
       <select id="custMethod" onchange="updateCartUI()">
         <option value="pickup_constantia" data-fee="0">Pickup — Constantia Sunday Market 10am–3pm (Free)</option>
         <option value="pickup_tafelsig" data-fee="0">Pickup — Tafelsig, Mitchells Plain (Free)</option>
-        <option value="delivery_zone1" data-fee="75">Uber Delivery — Zone 1: Mitchells Plain / Philippi (R75)</option>
-        <option value="delivery_zone2" data-fee="115">Uber Delivery — Zone 2: Southern &amp; Northern Suburbs (R115)</option>
-        <option value="delivery_zone3" data-fee="150">Uber Delivery — Zone 3: CBD / Atlantic Seaboard (R150)</option>
+        <option value="delivery">Uber Delivery — Cape Town Doorstep (Tues &amp; Thurs)</option>
       </select>
     </div>
-    <div class="form-field" id="addrField" style="display:none;">
-      <label>Street Address, Suburb &amp; Postal Code *</label>
-      <input type="text" id="custAddress" oninput="detectDeliveryZone()" placeholder="e.g. 14 Main Rd, Rondebosch, 7700" />
-      <div id="zoneDetectHint" style="font-size:0.76rem; margin-top:5px; font-weight:700; color:var(--sage);"></div>
+
+    <div class="form-field" id="suburbField" style="display:none;">
+      <label>Select Delivery Suburb / Area *</label>
+      <select id="custSuburb" onchange="updateCartUI()">
+        <option value="" data-fee="0">-- Choose your Cape Town suburb --</option>
+        <optgroup label="Zone 1 — Mitchells Plain &amp; Philippi (R75)">
+          <option value="Mitchells Plain (Beacon Valley / Eastridge / Lentegeur / Portlands / Rocklands / Tafelsig / Westridge / Woodlands)" data-fee="75">Mitchells Plain (All Areas) — R75</option>
+          <option value="Strandfontein / Colorado / Weltevreden Valley" data-fee="75">Strandfontein / Colorado / Weltevreden — R75</option>
+          <option value="Philippi / Mandalay" data-fee="75">Philippi / Mandalay — R75</option>
+        </optgroup>
+        <optgroup label="Zone 2 — Southern &amp; Northern Suburbs (R115)">
+          <option value="Athlone / Crawford / Rylands / Gatesville / Hatfield" data-fee="115">Athlone / Crawford / Rylands / Gatesville — R115</option>
+          <option value="Lansdowne / Kenwyn / Wetton / Ottery" data-fee="115">Lansdowne / Kenwyn / Wetton / Ottery — R115</option>
+          <option value="Grassy Park / Lotus River / Zeekoevlei / Pelican Park" data-fee="115">Grassy Park / Lotus River / Pelican Park — R115</option>
+          <option value="Rondebosch / Rosebank / Mowbray / Newlands" data-fee="115">Rondebosch / Rosebank / Mowbray / Newlands — R115</option>
+          <option value="Claremont / Kenilworth / Wynberg / Plumstead" data-fee="115">Claremont / Kenilworth / Wynberg / Plumstead — R115</option>
+          <option value="Constantia / Bishopscourt / Tokai / Bergvliet / Meadowridge" data-fee="115">Constantia / Tokai / Bergvliet / Meadowridge — R115</option>
+          <option value="Diep River / Retreat / Steenberg / Muizenberg / Kalk Bay / Fish Hoek" data-fee="115">Diep River / Retreat / Muizenberg / Fish Hoek — R115</option>
+          <option value="Pinelands / Thornton / Maitland / Kensington" data-fee="115">Pinelands / Thornton / Maitland — R115</option>
+          <option value="Goodwood / Edgemead / Monte Vista / Plattekloof / Panorama" data-fee="115">Goodwood / Edgemead / Plattekloof / Panorama — R115</option>
+          <option value="Parow / Bellville / Durbanville / Brackenfell / Kuils River" data-fee="115">Parow / Bellville / Durbanville / Brackenfell — R115</option>
+        </optgroup>
+        <optgroup label="Zone 3 — CBD, Atlantic Seaboard &amp; West Coast (R150)">
+          <option value="Observatory / Salt River / Woodstock" data-fee="150">Observatory / Salt River / Woodstock — R150</option>
+          <option value="Cape Town CBD / Gardens / Tamboerskloof / Oranjezicht / Vredehoek" data-fee="150">Cape Town CBD / City Bowl / Gardens — R150</option>
+          <option value="Green Point / Sea Point / Three Anchor Bay / Mouille Point / Fresnaye" data-fee="150">Green Point / Sea Point / Mouille Point — R150</option>
+          <option value="Bantry Bay / Clifton / Camps Bay / Bakoven / Hout Bay" data-fee="150">Camps Bay / Clifton / Bantry Bay / Hout Bay — R150</option>
+          <option value="Century City / Milnerton / Table View / Blouberg / Parklands / Sunningdale" data-fee="150">Century City / Milnerton / Table View / Blouberg — R150</option>
+        </optgroup>
+      </select>
     </div>
+
+    <div class="form-field" id="addrField" style="display:none;">
+      <label>House Number &amp; Street Name *</label>
+      <input type="text" id="custAddress" placeholder="e.g. 14 Main Road (or Complex / Unit Name)" />
+    </div>
+
     <div class="form-field">
       <label>Box Flavor Preferences / Gift Note</label>
       <textarea id="custNotes" rows="2" placeholder="If ordering a Mixed or Premium Box, list any specific molten/classic flavor preferences here..."></textarea>
@@ -2069,88 +2099,6 @@
     renderProducts();
     updateCartUI();
   }
-  // ==========================================
-  // CAPE TOWN DELIVERY ZONE AUTO-DETECTOR
-  // ==========================================
-  const ZONE_RULES = [
-    {
-      zone: "delivery_zone1",
-      label: "Zone 1: Mitchells Plain / Philippi (R75)",
-      keywords: [
-        "mitchells plain", "mitchell's plain", "tafelsig", "westridge", "rocklands",
-        "portlands", "beacon valley", "eastridge", "lentegeur", "woodlands",
-        "strandfontein", "colorado", "weltevreden", "mandalay", "philippi",
-        "7785", "7798", "7788", "7750"
-      ]
-    },
-    {
-      zone: "delivery_zone3",
-      label: "Zone 3: CBD / Atlantic Seaboard / West Coast (R150)",
-      keywords: [
-        "cape town", "cbd", "city bowl", "gardens", "tamboerskloof", "oranjezicht",
-        "vredehoek", "woodstock", "salt river", "observatory", "sea point",
-        "green point", "three anchor bay", "mouille point", "bantry bay", "clifton",
-        "camps bay", "fresnaye", "bakoven", "llandudno", "hout bay", "blouberg",
-        "table view", "milnerton", "parklands", "sunningdale", "century city",
-        "8000", "8001", "8005", "8040", "8051", "8060", "7925", "7441", "7439"
-      ]
-    },
-    {
-      zone: "delivery_zone2",
-      label: "Zone 2: Southern & Northern Suburbs (R115)",
-      keywords: [
-        "rondebosch", "newlands", "claremont", "kenilworth", "wynberg", "plumstead",
-        "constantia", "tokai", "bergvliet", "meadowridge", "diep river", "retreat",
-        "steenberg", "muizenberg", "kalk bay", "fish hoek", "athlone", "lansdowne",
-        "crawford", "rylands", "gatesville", "hatfield", "pinelands", "thornton",
-        "goodwood", "parow", "bellville", "durbanville", "brackenfell", "kuils river",
-        "ottery", "wetton", "grassy park", "lotus river", "zeekoevlei", "pelican park",
-        "7700", "7708", "7800", "7806", "7945", "7975", "7764", "7780", "7405",
-        "7460", "7500", "7530", "7550", "7560", "7580", "7941"
-      ]
-    }
-  ];
-
-  function detectDeliveryZone(forceOverride = false) {
-    const sel = document.getElementById("custMethod");
-    const hint = document.getElementById("zoneDetectHint");
-    if (!sel.value.startsWith("delivery_")) {
-      if (hint) hint.textContent = "";
-      return null;
-    }
-
-    const raw = (document.getElementById("custAddress").value || "").toLowerCase().trim();
-    if (!raw) {
-      if (hint) hint.textContent = "Enter your suburb or 4-digit postal code to auto-select your Cape Town zone.";
-      return null;
-    }
-
-    let matched = null;
-    for (const rule of ZONE_RULES) {
-      if (rule.keywords.some(kw => raw.includes(kw))) {
-        matched = rule;
-        break;
-      }
-    }
-
-    if (matched) {
-      if (sel.value !== matched.zone || forceOverride) {
-        sel.value = matched.zone;
-        updateCartUI();
-      }
-      if (hint) {
-        hint.style.color = "var(--sage)";
-        hint.innerHTML = `<i class="fa-solid fa-location-dot"></i> Auto-matched: ${matched.label}`;
-      }
-      return matched.zone;
-    } else {
-      if (hint) {
-        hint.style.color = "var(--caramel)";
-        hint.innerHTML = `<i class="fa-solid fa-circle-info"></i> Tip: Include your suburb or 4-digit postal code (e.g. Claremont 7708) to verify your zone.`;
-      }
-      return null;
-    }
-  }
 
   function updateCartUI() {
     const catalog = getCatalogMap();
@@ -2189,14 +2137,23 @@
 
     const sel = document.getElementById("custMethod");
     const opt = sel.options[sel.selectedIndex];
-    const isDelivery = sel.value.startsWith("delivery_");
-    document.getElementById("addrField").style.display = isDelivery ? "block" : "none";
-    document.getElementById("custAddress").required = isDelivery;
+    const isDelivery = sel.value === "delivery";
+
+    const suburbField = document.getElementById("suburbField");
+    const suburbSel = document.getElementById("custSuburb");
+    const addrField = document.getElementById("addrField");
+    const addrInput = document.getElementById("custAddress");
+
+    suburbField.style.display = isDelivery ? "block" : "none";
+    suburbSel.required = isDelivery;
+    addrField.style.display = isDelivery ? "block" : "none";
+    addrInput.required = isDelivery;
 
     const sched = getNextScheduledDate(sel.value);
     document.getElementById("scheduledDateBadge").textContent = `Scheduled Date: ${sched.readable}`;
 
-    const baseFee = Number(opt.getAttribute("data-fee")) || 0;
+    const suburbOpt = suburbSel.options[suburbSel.selectedIndex];
+    const baseFee = isDelivery ? (Number(suburbOpt.getAttribute("data-fee")) || 0) : 0;
     const isFreeUnlocked = subtotal >= FREE_SHIP_MIN;
     const shippingFee = isDelivery ? (isFreeUnlocked ? 0 : baseFee) : 0;
     const grandTotal = subtotal + shippingFee;
@@ -2220,6 +2177,17 @@
       label.innerHTML = `Add <strong>R${FREE_SHIP_MIN - subtotal}</strong> more to unlock <strong>FREE Delivery</strong>!`;
     }
 
+    let deliveryLineText = "FREE (Pickup)";
+    if (isDelivery) {
+      if (!suburbSel.value) {
+        deliveryLineText = "Select suburb above";
+      } else if (isFreeUnlocked) {
+        deliveryLineText = "FREE (R300+ Order)";
+      } else {
+        deliveryLineText = `R${shippingFee.toFixed(2)}`;
+      }
+    }
+
     const savingsLine = totalSavings > 0
       ? `<div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--sage); font-weight:700;"><span>Box Bundle Savings</span><span>-R${totalSavings.toFixed(2)}</span></div>`
       : "";
@@ -2227,7 +2195,7 @@
     document.getElementById("totalsBreakdown").innerHTML = `
       <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Items Subtotal</span><span>R${subtotal.toFixed(2)}</span></div>
       ${savingsLine}
-      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Delivery / Collection</span><span>${isDelivery ? (isFreeUnlocked ? 'FREE' : 'R' + shippingFee.toFixed(2)) : 'FREE (Pickup)'}</span></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Delivery / Collection</span><span>${deliveryLineText}</span></div>
       <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.05rem; border-top:1px solid var(--border); padding-top:8px;"><span>Total Due</span><span>R${grandTotal.toFixed(2)}</span></div>
     `;
 
@@ -2236,13 +2204,17 @@
     payBtn.disabled = count === 0;
     payBtnText.textContent = count > 0 ? `Pay R${grandTotal.toFixed(2)} Securely` : "Add Items to Checkout";
 
+    const methodSummary = isDelivery
+      ? `Uber Delivery (${suburbSel.value})`
+      : opt.text;
+
     return {
       count,
       subtotal,
       shippingFee,
       grandTotal,
       isDelivery,
-      methodText: opt.text,
+      methodText: methodSummary,
       scheduledIso: sched.iso,
       scheduledReadable: sched.readable
     };
@@ -2268,7 +2240,6 @@
   // ==========================================
   document.getElementById("checkoutForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    detectDeliveryZone(true);
     const totals = updateCartUI();
     if (totals.count === 0) return;
 
@@ -2286,7 +2257,7 @@
     }).join("\n");
 
     const deliveryType = totals.isDelivery ? "Delivery" : "Collection";
-    const deliveryCollection = custAddress
+    const deliveryCollection = totals.isDelivery
       ? `${totals.methodText} — ${custAddress}`
       : totals.methodText;
     const flavorsNotes = custNotes || "Standard Assortment";
@@ -2342,7 +2313,7 @@
         closeDrawer();
         document.getElementById("successModal").classList.add("active");
       },
-     onCancel: () => {
+      onCancel: () => {
         // Customer closed popup before paying; cart remains intact
       }
     });
