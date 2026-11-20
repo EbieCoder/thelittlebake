@@ -1046,6 +1046,19 @@
       color: var(--espresso);
     }
 
+    .mismatch-alert {
+      display: none;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #FFF4E5;
+      border: 1px solid #F59E0B;
+      color: #92400E;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
     .pay-btn {
       width: 100%;
       background: var(--caramel);
@@ -1588,7 +1601,7 @@
 
     <div class="form-field" id="suburbField" style="display:none;">
       <label>Select Delivery Suburb / Area *</label>
-      <select id="custSuburb" onchange="updateCartUI()">
+      <select id="custSuburb" onchange="onSuburbChange()">
         <option value="" data-fee="0">-- Choose your Cape Town suburb --</option>
         <optgroup label="Zone 1 — Mitchells Plain &amp; Philippi (R75)">
           <option value="Mitchells Plain (Beacon Valley / Eastridge / Lentegeur / Portlands / Rocklands / Tafelsig / Westridge / Woodlands)" data-fee="75">Mitchells Plain (All Areas) — R75</option>
@@ -1619,7 +1632,8 @@
 
     <div class="form-field" id="addrField" style="display:none;">
       <label>House Number &amp; Street Name *</label>
-      <input type="text" id="custAddress" placeholder="e.g. 14 Main Road (or Complex / Unit Name)" />
+      <input type="text" id="custAddress" oninput="checkAddressMismatch()" placeholder="e.g. 14 Main Road (or Complex / Unit Name)" />
+      <div id="addrMismatchAlert" class="mismatch-alert"></div>
     </div>
 
     <div class="form-field">
@@ -2091,6 +2105,73 @@
   }
 
   // ==========================================
+  // SUBURB-VS-STREET CROSS-CHECK WATCHDOG
+  // ==========================================
+  const SUBURB_WATCHDOG = [
+    // Zone 3 (R150)
+    { targetValue: "Observatory / Salt River / Woodstock", zoneName: "Zone 3", fee: 150, keys: ["observatory", "salt river", "woodstock", "7925"] },
+    { targetValue: "Cape Town CBD / Gardens / Tamboerskloof / Oranjezicht / Vredehoek", zoneName: "Zone 3", fee: 150, keys: ["cape town cbd", "city bowl", "gardens", "tamboerskloof", "oranjezicht", "vredehoek", "8000", "8001"] },
+    { targetValue: "Green Point / Sea Point / Three Anchor Bay / Mouille Point / Fresnaye", zoneName: "Zone 3", fee: 150, keys: ["green point", "sea point", "three anchor bay", "mouille point", "fresnaye", "8005", "8051"] },
+    { targetValue: "Bantry Bay / Clifton / Camps Bay / Bakoven / Hout Bay", zoneName: "Zone 3", fee: 150, keys: ["bantry bay", "clifton", "camps bay", "bakoven", "llandudno", "hout bay", "8040", "8060"] },
+    { targetValue: "Century City / Milnerton / Table View / Blouberg / Parklands / Sunningdale", zoneName: "Zone 3", fee: 150, keys: ["century city", "milnerton", "table view", "blouberg", "parklands", "sunningdale", "7441", "7439"] },
+    // Zone 2 (R115)
+    { targetValue: "Athlone / Crawford / Rylands / Gatesville / Hatfield", zoneName: "Zone 2", fee: 115, keys: ["athlone", "crawford", "rylands", "gatesville", "hatfield", "7764"] },
+    { targetValue: "Lansdowne / Kenwyn / Wetton / Ottery", zoneName: "Zone 2", fee: 115, keys: ["lansdowne", "kenwyn", "wetton", "ottery", "7780"] },
+    { targetValue: "Grassy Park / Lotus River / Zeekoevlei / Pelican Park", zoneName: "Zone 2", fee: 115, keys: ["grassy park", "lotus river", "zeekoevlei", "pelican park", "7941"] },
+    { targetValue: "Rondebosch / Rosebank / Mowbray / Newlands", zoneName: "Zone 2", fee: 115, keys: ["rondebosch", "rosebank", "mowbray", "newlands", "7700"] },
+    { targetValue: "Claremont / Kenilworth / Wynberg / Plumstead", zoneName: "Zone 2", fee: 115, keys: ["claremont", "kenilworth", "wynberg", "plumstead", "7708", "7800"] },
+    { targetValue: "Constantia / Bishopscourt / Tokai / Bergvliet / Meadowridge", zoneName: "Zone 2", fee: 115, keys: ["constantia", "bishopscourt", "tokai", "bergvliet", "meadowridge", "7806", "7945"] },
+    { targetValue: "Diep River / Retreat / Steenberg / Muizenberg / Kalk Bay / Fish Hoek", zoneName: "Zone 2", fee: 115, keys: ["diep river", "retreat", "steenberg", "muizenberg", "kalk bay", "fish hoek", "7975"] },
+    { targetValue: "Pinelands / Thornton / Maitland / Kensington", zoneName: "Zone 2", fee: 115, keys: ["pinelands", "thornton", "maitland", "kensington", "7405"] },
+    { targetValue: "Goodwood / Edgemead / Monte Vista / Plattekloof / Panorama", zoneName: "Zone 2", fee: 115, keys: ["goodwood", "edgemead", "monte vista", "plattekloof", "panorama", "7460"] },
+    { targetValue: "Parow / Bellville / Durbanville / Brackenfell / Kuils River", zoneName: "Zone 2", fee: 115, keys: ["parow", "bellville", "durbanville", "brackenfell", "kuils river", "kuilsriver", "7500", "7530", "7550", "7560", "7580"] }
+  ];
+
+  function onSuburbChange() {
+    checkAddressMismatch();
+    updateCartUI();
+  }
+
+  function checkAddressMismatch() {
+    const sel = document.getElementById("custMethod");
+    const suburbSel = document.getElementById("custSuburb");
+    const addrInput = document.getElementById("custAddress");
+    const alertBox = document.getElementById("addrMismatchAlert");
+
+    if (sel.value !== "delivery") {
+      if (alertBox) {
+        alertBox.style.display = "none";
+        alertBox.innerHTML = "";
+      }
+      return;
+    }
+
+    const streetText = (addrInput.value || "").toLowerCase().trim();
+    const currentOpt = suburbSel.options[suburbSel.selectedIndex];
+    const currentFee = Number(currentOpt.getAttribute("data-fee")) || 0;
+
+    let detected = null;
+    for (const entry of SUBURB_WATCHDOG) {
+      if (entry.keys.some(k => streetText.includes(k))) {
+        detected = entry;
+        break;
+      }
+    }
+
+    if (detected && detected.fee > currentFee) {
+      suburbSel.value = detected.targetValue;
+      updateCartUI();
+      if (alertBox) {
+        alertBox.style.display = "block";
+        alertBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Suburb mismatch detected — we automatically updated your delivery area to <strong>${detected.targetValue} (${detected.zoneName} – R${detected.fee})</strong> to match your street address.`;
+      }
+    } else if (!detected && alertBox) {
+      alertBox.style.display = "none";
+      alertBox.innerHTML = "";
+    }
+  }
+
+  // ==========================================
   // CART & DELIVERY CALCULATION
   // ==========================================
   function changeQty(skuKey, delta) {
@@ -2240,6 +2321,7 @@
   // ==========================================
   document.getElementById("checkoutForm").addEventListener("submit", function(e) {
     e.preventDefault();
+    checkAddressMismatch();
     const totals = updateCartUI();
     if (totals.count === 0) return;
 
