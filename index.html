@@ -196,7 +196,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* HERO BANNER (Rich Dark Espresso Brown) */
+    /* HERO BANNER */
     .hero-banner {
       background: linear-gradient(125deg, #24140E 0%, #3E241A 100%);
       border-radius: var(--radius-lg);
@@ -805,7 +805,7 @@
       font-weight: 800;
     }
 
-/* FOOTER */
+    /* FOOTER */
     .site-footer {
       background: var(--espresso);
       color: rgba(253, 251, 247, 0.84);
@@ -1060,8 +1060,14 @@
       transition: background 0.2s;
     }
 
-    .pay-btn:hover {
+    .pay-btn:hover:not(:disabled) {
       background: var(--caramel-dark);
+    }
+
+    .pay-btn:disabled {
+      background: #75655D;
+      cursor: not-allowed;
+      opacity: 0.75;
     }
 
     /* SUCCESS MODAL */
@@ -1095,8 +1101,8 @@
 </head>
 <body>
 
-<<div class="top-ribbon" style="background:#A94722; padding:12px 16px; font-size:0.84rem;">
-  🚧 <span>SITE MAINTENANCE IN PROGRESS</span> • Online checkout is temporarily paused while we complete system upgrades. Back live shortly — for urgent enquiries email <a href="mailto:orders@thelittlebake.co.za" style="color:#E5A93C; text-decoration:underline;">orders@thelittlebake.co.za</a>
+<div class="top-ribbon">
+  <span>FREE CAPE TOWN DELIVERY</span> ON ORDERS OVER R300 • FRESH TUESDAY &amp; THURSDAY DROPS + CONSTANTIA SUNDAY MARKET
 </div>
 
 <header>
@@ -1568,7 +1574,7 @@
       <input type="email" id="custEmail" required placeholder="ayesha@example.com" />
     </div>
     <div class="form-field">
-      <label>Mobile Number (For Courier Tracking) *</label>
+      <label>WhatsApp / Mobile Number *</label>
       <input type="tel" id="custPhone" required placeholder="082 123 4567" />
     </div>
     <div class="form-field">
@@ -1592,8 +1598,8 @@
 
     <div id="totalsBreakdown" style="background:var(--bg); padding:14px; border-radius:12px; border:1px solid var(--border); font-size:0.9rem; margin-bottom:12px;"></div>
 
-    <button type="button" class="pay-btn" id="payNowBtn" disabled style="background:#75655D; cursor:not-allowed; opacity:0.85;">
-      <i class="fa-solid fa-screwdriver-wrench"></i> <span>Online Checkout Paused — Back Soon</span>
+    <button type="submit" class="pay-btn" id="payNowBtn" disabled>
+      <i class="fa-solid fa-lock"></i> <span id="payBtnText">Add Items to Checkout</span>
     </button>
     <p style="text-align:center; font-size:0.75rem; color:var(--muted); margin-top:8px;">
       Instant 1-Click Payment via <strong>Paystack</strong> (Apple Pay, Card, SnapScan &amp; EFT)
@@ -1640,7 +1646,7 @@
     "premium-box": 6
   };
 
-  // Option 2 Box Pricing: Save R10 on 6-packs, Save R30 on 12-packs
+  // Box Pricing: Save R10 on 6-packs, Save R30 on 12-packs
   const BOX_GROUPS = [
     {
       id: "classic-box",
@@ -1716,7 +1722,7 @@
     }
   ];
 
-  // Single Products (Brownie Box + 7 Molten + 3 Classics; Strawberry Blush removed)
+  // Single Products
   const SINGLE_PRODUCTS = [
     {
       id: "chocolate-brownie-box",
@@ -1841,7 +1847,7 @@
     }
   ];
 
-  // Lookup map of all purchasable SKUs (including 6 & 12 variants)
+  // Lookup map of all purchasable SKUs
   function getCatalogMap() {
     const map = {};
     BOX_GROUPS.forEach(group => {
@@ -1912,7 +1918,6 @@
     const grid = document.getElementById("productGrid");
     grid.innerHTML = "";
 
-    // 1. Render 6/12 Variant Boxes first when matching
     if (activeCategory === "all" || activeCategory === "boxes") {
       BOX_GROUPS.forEach(group => {
         const size = boxVariantState[group.id];
@@ -1968,7 +1973,6 @@
       });
     }
 
-    // 2. Render Brownies + Individual Cookies
     SINGLE_PRODUCTS.filter(p => {
       const matchCat = activeCategory === "all" || p.category === activeCategory;
       const matchSearch = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
@@ -2013,7 +2017,6 @@
   // SCHEDULED DISPATCH / PICKUP DATE (SAST)
   // ==========================================
   function getNextScheduledDate(methodValue) {
-    // Current date/time in South Africa (UTC+2)
     const now = new Date();
     const sastString = now.toLocaleString("en-US", { timeZone: "Africa/Johannesburg" });
     const sast = new Date(sastString);
@@ -2024,17 +2027,12 @@
     target.setHours(0, 0, 0, 0);
 
     if (methodValue === "pickup_constantia") {
-      // Constantia Sunday Market: order by Sat 12:00 PM for this Sunday, else next Sunday
       let daysUntilSunday = (7 - day) % 7;
       if (daysUntilSunday === 0 || (day === 6 && hour >= 12)) {
         daysUntilSunday += 7;
       }
       target.setDate(target.getDate() + daysUntilSunday);
     } else {
-      // Tues & Thurs schedule:
-      // Mon <= 12:00 -> Tuesday (day 2)
-      // Mon > 12:00 to Wed <= 12:00 -> Thursday (day 4)
-      // Wed > 12:00 to Sun -> Following Tuesday (day 2)
       if (day === 1 && hour < 12) {
         target.setDate(target.getDate() + 1); // Tuesday
       } else if ((day === 1 && hour >= 12) || day === 2 || (day === 3 && hour < 12)) {
@@ -2049,10 +2047,12 @@
     const yyyy = target.getFullYear();
     const mm = String(target.getMonth() + 1).padStart(2, "0");
     const dd = String(target.getDate()).padStart(2, "0");
-    const readable = target.toLocaleDateString("en-ZA", {
+
+    // Matches Baking Prep sheet format: "Tuesday, November 24, 2026"
+    const readable = target.toLocaleDateString("en-US", {
       weekday: "long",
+      month: "long",
       day: "numeric",
-      month: "short",
       year: "numeric"
     });
 
@@ -2147,13 +2147,18 @@
       <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Delivery / Collection</span><span>${isDelivery ? (isFreeUnlocked ? 'FREE' : 'R' + shippingFee.toFixed(2)) : 'FREE (Pickup)'}</span></div>
       <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.05rem; border-top:1px solid var(--border); padding-top:8px;"><span>Total Due</span><span>R${grandTotal.toFixed(2)}</span></div>
     `;
-    document.getElementById("payBtnText").textContent = `Pay R${grandTotal.toFixed(2)} Securely`;
+
+    const payBtn = document.getElementById("payNowBtn");
+    const payBtnText = document.getElementById("payBtnText");
+    payBtn.disabled = count === 0;
+    payBtnText.textContent = count > 0 ? `Pay R${grandTotal.toFixed(2)} Securely` : "Add Items to Checkout";
 
     return {
       count,
       subtotal,
       shippingFee,
       grandTotal,
+      isDelivery,
       methodText: opt.text,
       scheduledIso: sched.iso,
       scheduledReadable: sched.readable
@@ -2196,9 +2201,11 @@
       return `${qty} x ${item.name}`;
     }).join("\n");
 
+    const deliveryType = totals.isDelivery ? "Delivery" : "Collection";
     const deliveryCollection = custAddress
       ? `${totals.methodText} — ${custAddress}`
       : totals.methodText;
+    const flavorsNotes = custNotes || "Standard Assortment";
 
     const handler = PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
@@ -2209,21 +2216,25 @@
       metadata: {
         customer_name: custName,
         customer_phone: custPhone,
-        items_summary: itemsOrdered,
+        items_ordered: itemsOrdered,
+        flavors_notes: flavorsNotes,
+        total_quantity: totals.count,
+        delivery_method: deliveryType,
         fulfilment_details: deliveryCollection,
-        scheduled_date: totals.scheduledIso,
+        scheduled_date: totals.scheduledReadable,
+        scheduled_iso: totals.scheduledIso,
         delivery_fee: totals.shippingFee.toFixed(2),
-        order_notes: custNotes || "None",
         custom_fields: [
           { display_name: "Customer Name", variable_name: "customer_name", value: custName },
-          { display_name: "Phone Number", variable_name: "customer_phone", value: custPhone },
-          { display_name: "Items Ordered", variable_name: "items_summary", value: itemsOrdered },
-          { display_name: "Delivery / Collection", variable_name: "fulfilment_details", value: deliveryCollection },
-          { display_name: "Scheduled Date", variable_name: "scheduled_date", value: totals.scheduledIso }
+          { display_name: "Phone / WhatsApp", variable_name: "customer_phone", value: custPhone },
+          { display_name: "Items Ordered", variable_name: "items_ordered", value: itemsOrdered },
+          { display_name: "Flavors / Notes", variable_name: "flavors_notes", value: flavorsNotes },
+          { display_name: "Total Quantity", variable_name: "total_quantity", value: String(totals.count) },
+          { display_name: "Delivery vs Collection", variable_name: "fulfilment_details", value: deliveryCollection },
+          { display_name: "Scheduled Date", variable_name: "scheduled_date", value: totals.scheduledReadable }
         ]
       },
       callback: function(response) {
-        // Payment confirmed by Paystack; webhook triggers Make.com -> Google Sheets
         document.getElementById("modalRef").textContent = response.reference;
         document.getElementById("modalAmount").textContent = `R${totals.grandTotal.toFixed(2)}`;
         document.getElementById("modalDate").textContent = totals.scheduledReadable;
@@ -2232,15 +2243,14 @@
         const mailBody = encodeURIComponent(
           `Order Reference: ${response.reference}\n` +
           `Customer: ${custName} (${custPhone})\n` +
-          `Items:\n${itemsOrdered}\n\n` +
+          `Items (${totals.count}):\n${itemsOrdered}\n\n` +
+          `Flavors / Notes: ${flavorsNotes}\n` +
           `Total Paid: R${totals.grandTotal.toFixed(2)}\n` +
           `Fulfilment: ${deliveryCollection}\n` +
-          `Scheduled Date: ${totals.scheduledReadable}\n` +
-          `Notes: ${custNotes || "None"}`
+          `Scheduled Date: ${totals.scheduledReadable}`
         );
         document.getElementById("modalEmailLink").href = `mailto:orders@thelittlebake.co.za?subject=${mailSubject}&body=${mailBody}`;
 
-        // Clear cart
         Object.keys(cart).forEach(k => delete cart[k]);
         renderProducts();
         updateCartUI();
@@ -2315,7 +2325,7 @@
           .join("");
       }
     } catch (err) {
-      // Keeps fallback review cards visible if offline or on a non-production preview URL
+      // Keeps fallback review cards visible
     }
   }
 
